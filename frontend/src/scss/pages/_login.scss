@@ -1,0 +1,81 @@
+@use '../abstracts/variables' as variables;
+@use '../abstracts/mixins' as mixins;
+
+.auth {
+    min-height: 90vh;
+    @include mixins.center;
+    padding: 2em variables.$container_padding_x_desktop;
+
+    @media (max-width: 768px) {
+        padding: 2em variables.$container_padding_x_mobile;
+    }
+}
+
+.auth-form-wrapper {
+    width: 100%;
+    max-width: 26em;
+}
+
+.auth-form__title {
+    font-size: 1.75em;
+    font-weight: 800;
+    margin-bottom: 0.5em;
+}
+
+.auth-form__subtitle {
+    color: variables.$medium_grey_color;
+    font-size: 0.9em;
+    margin-bottom: 2em;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+}
+
+.auth-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.auth-form__label {
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.auth-form__input {
+    border: 1px solid variables.$grey_color_1;
+    border-radius: 0.75em;
+    padding: 0.9em 1.1em;
+    font-size: 0.9em;
+
+    &:focus {
+        outline: 2px solid variables.$primary_color;
+        outline-offset: 2px;
+    }
+}
+
+.auth-form__submit {
+    background: variables.$primary_color;
+    color: variables.$secondary_color;
+    border: none;
+    border-radius: 3em;
+    padding: 1em;
+    font-weight: 600;
+    margin-top: 0.5em;
+    cursor: pointer;
+}
+
+.auth-form__error {
+    color: variables.$primary_red_color;
+    font-size: 0.875em;
+    margin-bottom: 1em;
+    text-align: center;
+    display: none;
+
+    &--visible {
+        display: block;
+    }
+}

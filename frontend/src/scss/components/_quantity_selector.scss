@@ -1,0 +1,23 @@
+@use '../abstracts/variables' as variables;
+@use '../abstracts/mixins' as mixins;
+
+.quantity-selector {
+    background-color: variables.$dress_style_bg_color;
+    @include mixins.center;
+    gap: 1em;
+    padding: .5em 1.4em;
+    border-radius: 2em;
+    align-self: stretch;
+
+    &__button {
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        font-size: 1.5em;
+    }
+
+    &__value {
+        font-size: 1em;
+        font-weight: 600;
+    }
+}

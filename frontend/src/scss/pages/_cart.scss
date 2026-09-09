@@ -1,0 +1,738 @@
+@use '../components/navbar';
+@use '../components/breadcrumbs';
+@use '../abstracts/variables' as variables;
+@use '../components/quantity_selector';
+@use '../components/footer';
+@use '../components/button';
+
+
+.cart-page-container {
+    padding: 0 variables.$container_padding_x_desktop 4em;
+
+    @media(max-width:992px) {
+        padding: 0 variables.$container_padding_x_mobile 4em;
+    }
+}
+
+.cart {
+    &__title {
+        font-size: 2.5em;
+        font-weight: 800;
+        margin-bottom: .8em;
+    }
+
+    &__layout {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5em;
+
+        @media (max-width: 992px) {
+            flex-direction: column;
+        }
+    }
+
+    &__items {
+        list-style: none;
+        flex: 2;
+        border: 1px solid variables.$light_grey_color;
+        border-radius: 1.25em;
+        padding: 1.25em;
+
+        @media (max-width:992px) {
+            width: 100%;
+        }
+    }
+
+    &__empty-state { padding: 3.5rem 1rem; text-align: center; }
+    &__empty-title {
+        margin-bottom: 0.5rem;
+        color: variables.$primary_color;
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+    &__empty-description { margin-bottom: 1.5rem; color: variables.$medium_grey_color; }
+    &__empty-action { display: inline-block; text-decoration: none; }
+}
+
+.cart-item {
+    display: flex;
+    gap: 1.25em;
+    padding: 1.5em 0;
+    border-bottom: 1px solid #e5e5e5;
+
+    &:first-child {
+        padding-top: 0;
+    }
+
+    &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    &__image {
+        width: 6em;
+        height: 6em;
+        object-fit: cover;
+        border-radius: 0.75em;
+    }
+
+    &__content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &__top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    &__details {
+        flex: 1;
+    }
+
+    &__name {
+        font-weight: 600;
+        margin-bottom: 0.5em;
+    }
+
+    &__meta {
+        font-size: 0.875em;
+        color: variables.$medium_grey_color;
+
+        &-value {
+            color: variables.$primary_color;
+        }
+    }
+
+    &__remove {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+
+        &:hover {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+
+        &-icon {
+            width: 1.2em;
+            height: 1.2em;
+            cursor: pointer;
+            display: block;
+        }
+    }
+
+    &__bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__price {
+        font-weight: 700;
+    }
+}
+
+.order-summary {
+    flex: 1;
+    border: 1px solid variables.$light_grey_color;
+    border-radius: 1.25em;
+    padding: 1.5em;
+
+    @media (max-width:992px) {
+        width: 100%;
+    }
+
+    &__title {
+        font-size: 1.25em;
+        font-weight: 700;
+        margin-bottom: 1em;
+    }
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1em;
+
+        &--total {
+            .order-summary__label {
+                font-weight: 400;
+            }
+
+            .order-summary__value {
+                font-size: 1.25em;
+                font-weight: 700;
+            }
+        }
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    &__label {
+        color: variables.$medium_grey_color;
+    }
+
+    &__value {
+        font-weight: 600;
+
+        &--discount {
+            color: variables.$primary_red_color;
+        }
+    }
+
+    &__divider {
+        border: none;
+        border-top: 1px solid #e5e5e5;
+        margin-bottom: 1em;
+    }
+
+    &__promo {
+        display: flex;
+        gap: 0.75em;
+        margin: 1.5em 0;
+
+        &-input {
+            flex: 1;
+            background: variables.$light_grey_color;
+            border: none;
+            border-radius: 3em;
+            padding: 0.9em 1.25em;
+        }
+
+        &-button {
+            background: variables.$primary_color;
+            color: variables.$secondary_color;
+            border: none;
+            border-radius: 3em;
+            padding: 0.9em 1.5em;
+        }
+
+        &-error {
+            color: variables.$primary_red_color;
+            font-size: 0.8em;
+            margin-bottom: 1em;
+        }
+    }
+
+    &__checkout {
+        width: 100%;
+        background: variables.$primary_color;
+        color: variables.$secondary_color;
+        cursor: pointer;
+        border: none;
+        border-radius: 3em;
+        padding: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+
+        &:disabled { opacity: 0.6; cursor: not-allowed; }
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 1.5em;
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.modal {
+    background: variables.$secondary_color;
+    border-radius: 1.25em;
+    padding: 2.5em;
+    max-width: 24em;
+    width: 100%;
+    text-align: center;
+
+    &__icon {
+        width: 3.5em;
+        height: 3.5em;
+        margin-bottom: 1em;
+    }
+
+    &__title {
+        font-size: 1.5em;
+        font-weight: 700;
+        margin-bottom: 0.5em;
+    }
+
+    &__message {
+        color: variables.$medium_grey_color;
+        font-size: 0.9em;
+        margin-bottom: 1.5em;
+    }
+
+    &__close {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   Checkout Modal (Clean, Spacious, Human-Crafted)
+   ========================================================================== */
+.checkout-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.25em;
+    animation: chkModalBackdropFade 0.2s ease-out;
+}
+
+.checkout-modal {
+    position: relative;
+    background: variables.$secondary_color;
+    border-radius: 22px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    animation: chkModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &__close-btn {
+        position: absolute;
+        top: 1.25em;
+        right: 1.25em;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: variables.$dress_style_bg_color;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: variables.$primary_color;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.15s ease;
+
+        &:hover {
+            background: #e5e5e5;
+            transform: scale(1.05);
+        }
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__header {
+        padding: 1.75em 1.75em 0.5em;
+    }
+
+    &__title {
+        font-size: 1.5em;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    &__subtitle {
+        font-size: 0.85em;
+        color: variables.$medium_grey_color;
+        margin-top: 0.25em;
+    }
+
+    &__error-alert {
+        margin: 0.75em 1.75em 0;
+        padding: 0.7em 1em;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        border-radius: 10px;
+        font-size: 0.85em;
+        font-weight: 500;
+    }
+
+    &__content {
+        padding: 1.25em 1.75em;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25em;
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+
+        &-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &-title {
+            display: flex;
+            align-items: center;
+            gap: 0.45em;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: variables.$primary_color;
+        }
+    }
+
+    &__edit-link {
+        background: transparent;
+        border: none;
+        color: variables.$primary_color;
+        font-size: 0.8em;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35em;
+        text-decoration: underline;
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
+
+    &__address-preview {
+        background: variables.$dress_style_bg_color;
+        border-radius: 12px;
+        padding: 0.85em 1.1em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2em;
+    }
+
+    &__address-recipient {
+        font-size: 0.9em;
+        font-weight: 700;
+        color: variables.$primary_color;
+    }
+
+    &__address-text {
+        font-size: 0.85em;
+        color: variables.$primary_color;
+        line-height: 1.4;
+    }
+
+    &__address-country {
+        font-size: 0.75em;
+        color: variables.$medium_grey_color;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    &__address-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
+
+    &__input {
+        width: 100%;
+        padding: 0.65em 0.85em;
+        border-radius: 10px;
+        border: 1px solid variables.$light_grey_color;
+        background: variables.$dress_style_bg_color;
+        font-family: inherit;
+        font-size: 0.85em;
+        outline: none;
+        transition: border-color 0.15s ease, background 0.15s ease;
+
+        &:focus {
+            border-color: variables.$primary_color;
+            background: #fff;
+        }
+    }
+
+    &__input-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5em;
+    }
+
+    &__cancel-edit {
+        background: transparent;
+        border: none;
+        color: variables.$medium_grey_color;
+        font-size: 0.8em;
+        font-weight: 600;
+        cursor: pointer;
+        align-self: flex-start;
+        padding: 0.2em 0;
+        text-decoration: underline;
+
+        &:hover {
+            color: variables.$primary_color;
+        }
+    }
+
+    /* Payment Methods */
+    &__payment-methods {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5em;
+
+        @media (max-width: 420px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__pm-pill {
+        display: flex;
+        align-items: center;
+        gap: 0.6em;
+        padding: 0.7em 0.9em;
+        border-radius: 12px;
+        border: 1.5px solid variables.$light_grey_color;
+        background: variables.$secondary_color;
+        font-family: inherit;
+        font-size: 0.85em;
+        font-weight: 600;
+        color: variables.$primary_color;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        text-align: left;
+
+        &:hover {
+            background: #fafafa;
+            border-color: rgba(0, 0, 0, 0.3);
+        }
+
+        &--selected {
+            border-color: variables.$primary_color;
+            background: #fbfbfb;
+            box-shadow: 0 0 0 1px variables.$primary_color;
+        }
+    }
+
+    &__pm-check {
+        margin-left: auto;
+        color: variables.$primary_color;
+    }
+
+    /* Clean Summary */
+    &__summary-card {
+        background: variables.$dress_style_bg_color;
+        border-radius: 14px;
+        padding: 0.85em 1.1em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35em;
+    }
+
+    &__summary-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85em;
+        color: variables.$medium_grey_color;
+
+        &--discount {
+            color: variables.$primary_red_color;
+            font-weight: 600;
+        }
+
+        &--total {
+            margin-top: 0.35em;
+            padding-top: 0.35em;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            font-size: 1.05em;
+            font-weight: 800;
+            color: variables.$primary_color;
+
+            strong {
+                font-size: 1.1em;
+            }
+        }
+    }
+
+    /* Footer */
+    &__footer {
+        padding: 0 1.75em 1.75em;
+    }
+
+    &__submit-btn {
+        width: 100%;
+        padding: 0.95em 1.5em;
+        border-radius: 62px;
+        font-size: 0.95em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        cursor: pointer;
+        border: none;
+        transition: background 0.15s ease;
+
+        &:hover:not(:disabled) {
+            background: #262626;
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    /* Success State */
+    &__success {
+        padding: 2.75em 2em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.75em;
+    }
+
+    &__success-icon {
+        color: #16a34a;
+        margin-bottom: 0.25em;
+    }
+
+    &__success-title {
+        font-size: 1.5em;
+        font-weight: 800;
+    }
+
+    &__success-id {
+        font-size: 0.85em;
+        font-weight: 700;
+        background: #f0fdf4;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+        padding: 0.3em 0.85em;
+        border-radius: 62px;
+        letter-spacing: 0.5px;
+    }
+
+    &__success-message {
+        font-size: 0.85em;
+        color: variables.$medium_grey_color;
+        line-height: 1.5;
+        max-width: 320px;
+
+        strong {
+            color: variables.$primary_color;
+        }
+    }
+
+    &__success-info {
+        width: 100%;
+        background: variables.$dress_style_bg_color;
+        border-radius: 12px;
+        padding: 0.85em 1.1em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4em;
+        margin: 0.4em 0;
+        text-align: left;
+    }
+
+    &__info-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85em;
+
+        span {
+            color: variables.$medium_grey_color;
+        }
+
+        strong {
+            color: variables.$primary_color;
+            text-align: right;
+        }
+
+        &--total {
+            margin-top: 0.25em;
+            padding-top: 0.3em;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+            strong {
+                font-size: 1.05em;
+                font-weight: 800;
+            }
+        }
+    }
+
+    &__success-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        width: 100%;
+        margin-top: 0.4em;
+    }
+
+    &__action-btn {
+        width: 100%;
+        padding: 0.85em;
+        border-radius: 62px;
+        font-size: 0.9em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        cursor: pointer;
+    }
+
+    &__secondary-btn {
+        width: 100%;
+        background: transparent;
+        border: 1px solid variables.$light_grey_color;
+        color: variables.$primary_color;
+        padding: 0.8em;
+        border-radius: 62px;
+        font-family: inherit;
+        font-size: 0.85em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s ease;
+
+        &:hover {
+            background: variables.$dress_style_bg_color;
+        }
+    }
+}
+
+@keyframes chkModalBackdropFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes chkModalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

@@ -1,0 +1,110 @@
+@use '../abstracts/variables' as variables;
+@use '../abstracts/mixins' as mixins;
+
+.auth {
+    min-height: 90vh;
+    @include mixins.center;
+    padding: 2em variables.$container_padding_x_desktop;
+
+    @media (max-width: 768px) {
+        padding: 2em variables.$container_padding_x_mobile;
+    }
+}
+
+.auth-form-wrapper {
+    width: 100%;
+    max-width: 42em;
+}
+
+.auth-form__title {
+    font-size: 1.75em;
+    font-weight: 800;
+    margin-bottom: 0.5em;
+}
+
+.auth-form__subtitle {
+    color: variables.$medium_grey_color;
+    font-size: 0.9em;
+    margin-bottom: 2em;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+
+.auth-form__group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1em;
+    padding: 1.25em;
+    border: 1px solid variables.$grey_color_1;
+    border-radius: 0.75em;
+}
+
+.auth-form__group-title {
+    grid-column: 1 / -1;
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.auth-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.auth-form__field--wide {
+    grid-column: 1 / -1;
+}
+
+.auth-form__label {
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.auth-form__input {
+    width: 100%;
+    border: 1px solid variables.$grey_color_1;
+    border-radius: 0.75em;
+    padding: 0.9em 1.1em;
+    font-size: 0.9em;
+
+    &:focus {
+        outline: 2px solid variables.$primary_color;
+        outline-offset: 2px;
+    }
+}
+
+.auth-form__submit {
+    background: variables.$primary_color;
+    color: variables.$secondary_color;
+    border: none;
+    border-radius: 3em;
+    padding: 1em;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.auth-form__submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.auth-form__error {
+    color: variables.$primary_red_color;
+    font-size: 0.875em;
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .auth-form__group {
+        grid-template-columns: 1fr;
+        padding: 1em;
+    }
+
+    .auth-form__field--wide {
+        grid-column: auto;
+    }
+}

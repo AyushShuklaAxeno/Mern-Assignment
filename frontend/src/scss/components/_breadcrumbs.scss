@@ -1,0 +1,31 @@
+@use '../abstracts/mixins' as mixins;
+@use '../abstracts/variables' as variables;
+
+
+.breadcrumb {
+    padding: 1.5em 0;
+
+    .breadcrumb__list {
+        @include mixins.center($justifyContent: start);
+        list-style: none;
+        gap: .75em;
+
+        .breadcrumb__item {
+            @include mixins.center;
+            gap: .25em;
+            color: variables.$medium_grey_color;
+            text-decoration: none;
+            font-size: .9em;
+
+            @media (max-width:768px) {
+                font-size: .875em;
+            }
+
+        }
+
+        .breadcrumb__link {
+            color: inherit;
+            text-decoration: none;
+        }
+    }
+}

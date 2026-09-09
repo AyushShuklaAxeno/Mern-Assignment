@@ -1,0 +1,65 @@
+@use '../abstracts/mixins' as mixins;
+@use '../abstracts/variables' as variables;
+
+.product-section {
+    padding: 4em 0;
+    @include mixins.center($flexDirection: column, $justifyContent: center);
+    gap: 3.4em;
+
+    @media (max-width:992px) {
+
+        padding: 2.5em 0;
+    }
+
+    &__heading {
+
+        font-weight: 700;
+        font-size: 3em;
+
+        @media (max-width:992px) {
+            font-size: 2em;
+        }
+    }
+
+    &__state {
+        padding: 2em;
+        color: #999;
+        text-align: center;
+    }
+}
+
+.products-container {
+    overflow-x: auto;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1.25em;
+    list-style: none;
+    padding: 0 variables.$container_padding_x_desktop 1em;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: variables.$light_grey_color transparent;
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: variables.$light_grey_color;
+        border-radius: 3px;
+    }
+
+    & > li {
+        list-style: none;
+        flex-shrink: 0;
+    }
+
+    @media (max-width:992px) {
+        padding: 0 variables.$container_padding_x_mobile 1em;
+    }
+}

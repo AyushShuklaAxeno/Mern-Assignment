@@ -1,0 +1,543 @@
+@use '../abstracts/variables';
+@use '../abstracts/mixins';
+
+.profile-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #fafafa;
+}
+
+.profile-container {
+    flex: 1;
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+
+    @media (max-width: 992px) {
+        padding: 2em variables.$container_padding_x_tablet 4em;
+    }
+
+    @media (max-width: 576px) {
+        padding: 1.5em variables.$container_padding_x_mobile 3em;
+    }
+}
+
+.profile-loading-screen {
+    @include mixins.center;
+    min-height: 50vh;
+    font-size: 1em;
+    color: variables.$medium_grey_color;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    margin-bottom: 2em;
+    padding-bottom: 1.25em;
+    border-bottom: 1px solid variables.$light_grey_color;
+
+    &__title {
+        font-size: 1.75em;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: variables.$primary_color;
+        margin-bottom: 0.15em;
+
+        @media (max-width: 576px) {
+            font-size: 1.4em;
+        }
+    }
+
+    &__email {
+        font-size: 0.9em;
+        color: variables.$medium_grey_color;
+    }
+}
+
+.profile-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.5em 1em;
+    border-radius: 62px;
+    border: 1px solid variables.$light_grey_color;
+    background: variables.$secondary_color;
+    color: variables.$primary_color;
+    font-family: inherit;
+    font-size: 0.85em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+        background: #f5f5f5;
+        border-color: variables.$grey_color_1;
+    }
+}
+
+/* ==========================================================================
+   Grid Layout
+   ========================================================================== */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 1.75em;
+    align-items: start;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+    }
+
+    &__sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25em;
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25em;
+    }
+}
+
+/* ==========================================================================
+   Card Common
+   ========================================================================== */
+.profile-card {
+    background: variables.$secondary_color;
+    border: 1px solid variables.$light_grey_color;
+    border-radius: 14px;
+    padding: 1.4em 1.5em;
+
+    @media (max-width: 576px) {
+        padding: 1.2em;
+        border-radius: 12px;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.1em;
+    }
+
+    &__title {
+        font-size: 1.05em;
+        font-weight: 700;
+        color: variables.$primary_color;
+        letter-spacing: -0.2px;
+    }
+}
+
+/* ==========================================================================
+   Action Buttons
+   ========================================================================== */
+.profile-btn-action {
+    background: none;
+    border: none;
+    padding: 0.25em 0.5em;
+    font-family: inherit;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: variables.$primary_color;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+.profile-btn-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: variables.$primary_color;
+    color: variables.$secondary_color;
+    padding: 0.55em 1.2em;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85em;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+
+    &:hover:not(:disabled) {
+        opacity: 0.85;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.profile-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: variables.$primary_color;
+    padding: 0.55em 1.1em;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85em;
+    font-weight: 500;
+    border: 1px solid variables.$light_grey_color;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover:not(:disabled) {
+        background: #f5f5f5;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+/* ==========================================================================
+   Alerts / Feedback Messages
+   ========================================================================== */
+.profile-msg {
+    padding: 0.6em 0.85em;
+    border-radius: 8px;
+    font-size: 0.82em;
+    margin-bottom: 0.9em;
+
+    &--success {
+        background: #f0fdf4;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+    }
+
+    &--error {
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+}
+
+/* ==========================================================================
+   Personal Details List
+   ========================================================================== */
+.profile-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.profile-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #f2f2f2;
+
+    &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    &__label {
+        color: variables.$medium_grey_color;
+        font-size: 0.85em;
+    }
+
+    &__value {
+        font-weight: 600;
+        color: variables.$primary_color;
+        text-align: right;
+    }
+}
+
+/* ==========================================================================
+   Address Box & Empty State
+   ========================================================================== */
+.profile-address-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    font-size: 0.9em;
+    line-height: 1.4;
+
+    &__street {
+        font-weight: 600;
+        color: variables.$primary_color;
+    }
+
+    &__city {
+        color: variables.$medium_grey_color;
+    }
+
+    &__country {
+        color: variables.$medium_grey_color;
+        font-size: 0.85em;
+    }
+}
+
+.profile-address-empty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.88em;
+    color: variables.$medium_grey_color;
+    padding: 0.5em 0;
+}
+
+/* ==========================================================================
+   Inline Edit Form
+   ========================================================================== */
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85em;
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.6em;
+        margin-top: 0.4em;
+    }
+}
+
+.profile-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6em;
+
+    @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+
+    &__label {
+        font-size: 0.78em;
+        font-weight: 600;
+        color: variables.$medium_grey_color;
+    }
+
+    &__input {
+        width: 100%;
+        padding: 0.55em 0.75em;
+        border-radius: 8px;
+        border: 1px solid variables.$light_grey_color;
+        background: #fafafa;
+        font-family: inherit;
+        font-size: 0.88em;
+        outline: none;
+        transition: border-color 0.15s ease, background 0.15s ease;
+
+        &:focus {
+            border-color: variables.$primary_color;
+            background: variables.$secondary_color;
+        }
+    }
+}
+
+/* ==========================================================================
+   Orders Section
+   ========================================================================== */
+.profile-state-text {
+    padding: 2.5em 1em;
+    text-align: center;
+    font-size: 0.9em;
+    color: variables.$medium_grey_color;
+}
+
+.profile-orders-empty {
+    padding: 3em 1em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+
+    p {
+        font-size: 0.95em;
+        color: variables.$medium_grey_color;
+    }
+}
+
+.profile-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.profile-order-item-card {
+    border: 1px solid #ebebeb;
+    border-radius: 10px;
+    background: variables.$secondary_color;
+    overflow: hidden;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75em 1em;
+        background: #fbfbfb;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    &__id {
+        font-size: 0.85em;
+        font-weight: 700;
+        color: variables.$primary_color;
+        margin-right: 0.6em;
+    }
+
+    &__date {
+        font-size: 0.8em;
+        color: variables.$medium_grey_color;
+    }
+
+    &__items {
+        padding: 0.85em 1em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75em 1em;
+        border-top: 1px solid #f0f0f0;
+        font-size: 0.85em;
+    }
+
+    &__dest {
+        color: variables.$medium_grey_color;
+        font-size: 0.8em;
+    }
+
+    &__total {
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+        margin-left: auto;
+
+        span {
+            color: variables.$medium_grey_color;
+            font-size: 0.85em;
+        }
+
+        strong {
+            color: variables.$primary_color;
+            font-size: 1.05em;
+            font-weight: 700;
+        }
+    }
+}
+
+/* ==========================================================================
+   Product Row inside Order
+   ========================================================================== */
+.profile-product-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85em;
+
+    &__thumb {
+        width: 44px;
+        height: 44px;
+        border-radius: 6px;
+        background: variables.$product_bg_color;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: variables.$medium_grey_color;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__name {
+        font-size: 0.88em;
+        font-weight: 600;
+        color: variables.$primary_color;
+        margin-bottom: 0.15em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__meta {
+        font-size: 0.78em;
+        color: variables.$medium_grey_color;
+        display: flex;
+        gap: 0.6em;
+    }
+
+    &__price {
+        font-size: 0.88em;
+        font-weight: 600;
+        color: variables.$primary_color;
+        white-space: nowrap;
+    }
+}
+
+/* ==========================================================================
+   Status Pills
+   ========================================================================== */
+.profile-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2em 0.65em;
+    border-radius: 62px;
+    font-size: 0.72em;
+    font-weight: 600;
+    text-transform: capitalize;
+
+    &--placed {
+        background: #f0f9ff;
+        color: #0369a1;
+    }
+
+    &--processing {
+        background: #fefce8;
+        color: #a16207;
+    }
+
+    &--shipped {
+        background: #f5f3ff;
+        color: #6d28d9;
+    }
+
+    &--delivered {
+        background: #f0fdf4;
+        color: #15803d;
+    }
+
+    &--cancelled {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+}

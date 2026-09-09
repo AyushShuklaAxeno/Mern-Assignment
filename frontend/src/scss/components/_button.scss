@@ -1,0 +1,40 @@
+@use '../abstracts/variables' as variables;
+
+.button {
+
+
+    padding: 1em 5em;
+    border-radius: 4em;
+    border: 0;
+    font-size: 1em;
+
+    &--primary {
+        color: variables.$secondary_color;
+        background-color: variables.$primary_color;
+    }
+
+    &--secondary {
+        border: 1px solid variables.$light_grey_color;
+        background: transparent;
+    }
+
+    &--normal {
+        background-color: variables.$medium_grey_color;
+    }
+
+    &:disabled {
+        background-color: #e0e0e0;
+        color: #888888;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+    
+    @media (max-width:992px) {
+        padding: 1em 2em;
+    }
+
+    @media (max-width:768px) {
+        width: 100%;
+    }
+    
+}

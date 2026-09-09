@@ -1,0 +1,141 @@
+@use '../abstracts/mixins' as mixins;
+@use '../abstracts/variables' as variables;
+
+.navbar {
+    &__offer {
+        background: variables.$primary_color;
+        color: variables.$secondary_color;
+        @include mixins.center($justifyContent: space-between);
+        padding: .5em 2em;
+        font-size: .875em;
+        font-weight: 400;
+
+        &-highlight {
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        &-cancel {
+            cursor: pointer;
+        }
+    }
+
+    &__container {
+        @include mixins.center($justifyContent: space-between);
+        padding: 1.5em variables.$container_padding_x_desktop;
+        gap: 40px;
+
+        @media(max-width:992px) {
+            padding: 1.5em variables.$container_padding_x_mobile;
+        }
+    }
+
+    &__menu {
+        display: none;
+
+        @media(max-width:768px) {
+            display: block;
+        }
+    }
+
+    &__brand-logo {
+        width: 140px;
+
+        @media(max-width:992px) {
+            width: 120px;
+        }
+    }
+
+    &__links {
+        display: flex;
+        list-style: none;
+        gap: 24px;
+        flex-shrink: 0;
+
+        @media(max-width:768px) {
+            display: none;
+        }
+
+        &-item {
+            font-weight: 400;
+            font-size: .9em;
+            @include mixins.center;
+            gap: .2em;
+        }
+
+        &-link {
+            text-decoration: none;
+            color: variables.$primary_color;
+            @include mixins.center;
+            gap: .2em;
+        }
+
+        &-icon {
+            margin-top: .2em;
+        }
+    }
+
+    &__search {
+        @include mixins.center($justifyContent: start);
+        background: variables.$navbar_search_bg;
+        padding: .75rem 1rem;
+        gap: .75em;
+        border-radius: 4em;
+        width: 522px;
+
+        @media(max-width:992px) {
+            display: none;
+        }
+
+        &-icon {
+            width: 1.2em;
+        }
+
+        &-input {
+            outline: 0;
+            border: 0;
+            background: transparent;
+            font-size: .9rem;
+            font-weight: 200 !important;
+            color: variables.$grey_color_1;
+
+            &::placeholder {
+                color: variables.$grey_color_1;
+            }
+        }
+    }
+
+    &__group {
+        @include mixins.center($justifyContent: start);
+        gap: .8em;
+    }
+
+    &__cart-profile__search {
+        display: none;
+
+        @media(max-width:992px) {
+            display: block;
+        }
+    }
+
+    &__links-link--admin { font-weight: 700; }
+
+    &__cart-link { position: relative; }
+
+    &__cart-count {
+        position: absolute;
+        top: -6px;
+        right: -8px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: variables.$primary_color;
+        color: variables.$secondary_color;
+        font-size: 0.65rem;
+        font-weight: 700;
+    }
+}

@@ -1,0 +1,563 @@
+@use '../abstracts/mixins' as mixins;
+@use '../abstracts/variables' as variables;
+
+.shop-page-container {
+    padding: 0 variables.$container_padding_x_desktop 4em;
+
+    @media (max-width: 992px) {
+        padding: 0 variables.$container_padding_x_mobile 3em;
+    }
+}
+
+.shop-layout {
+    display: flex;
+    gap: 1.5em;
+    align-items: flex-start;
+
+    &__sidebar {
+        flex: 0 0 295px;
+        width: 295px;
+        position: sticky;
+        top: 2em;
+
+        @media (max-width: 992px) {
+            display: none;
+        }
+    }
+
+    &__content {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+    }
+}
+
+.shop-filters {
+    border: 1px solid variables.$light_grey_color;
+    border-radius: 1.25em;
+    padding: 1.25em 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+    background: variables.$secondary_color;
+
+    &--mobile {
+        border: none;
+        padding: 0;
+    }
+
+    &__header {
+        @include mixins.center($justifyContent: space-between);
+    }
+
+    &__title-group {
+        @include mixins.center;
+        gap: 0.5em;
+    }
+
+    &__title {
+        font-size: 1.25em;
+        font-weight: 700;
+    }
+
+    &__filter-icon {
+        width: 1.25em;
+        height: 1.25em;
+        opacity: 0.8;
+    }
+
+    &__close-button {
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        padding: 0.25em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 1em;
+            height: 1em;
+        }
+    }
+
+    &__divider {
+        border: 0;
+        border-top: 1px solid variables.$light_grey_color;
+        margin: 0;
+    }
+
+    &__categories {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
+    }
+
+    &__category-button {
+        width: 100%;
+        @include mixins.center($justifyContent: space-between);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        color: variables.$medium_grey_color;
+        font-size: 0.95em;
+        font-family: inherit;
+        padding: 0.25em 0;
+        text-align: left;
+        transition: color 0.15s ease;
+
+        &:hover,
+        &--active {
+            color: variables.$primary_color;
+            font-weight: 700;
+        }
+    }
+
+    &__chevron {
+        width: 0.75em;
+        height: 0.75em;
+        opacity: 0.5;
+    }
+
+    &__section-header {
+        width: 100%;
+        @include mixins.center($justifyContent: space-between);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1.1em;
+        font-weight: 700;
+        padding: 0;
+    }
+
+    &__accordion-arrow {
+        transition: transform 0.2s ease;
+        display: inline-block;
+        font-size: 0.85em;
+
+        &--open {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__price-body {
+        margin-top: 0.75em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
+    }
+
+    &__price-slider {
+        position: relative;
+        width: 100%;
+        height: 24px;
+        display: flex;
+        align-items: center;
+    }
+
+    &__slider-track {
+        position: absolute;
+        width: 100%;
+        height: 6px;
+        background-color: variables.$dress_style_bg_color;
+        border-radius: 4px;
+    }
+
+    &__slider-progress {
+        position: absolute;
+        left: attr(data-min-percent percentage);
+        right: calc(100% - attr(data-max-percent percentage));
+        height: 6px;
+        background-color: variables.$primary_color;
+        border-radius: 4px;
+        z-index: 1;
+    }
+
+    &__range {
+        position: absolute;
+        width: 100%;
+        height: 6px;
+        background: none;
+        pointer-events: none;
+        -webkit-appearance: none;
+        appearance: none;
+        margin: 0;
+        z-index: 2;
+
+        &::-webkit-slider-thumb {
+            pointer-events: auto;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: variables.$primary_color;
+            cursor: pointer;
+            border: 2px solid variables.$secondary_color;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+            transition: transform 0.15s ease;
+
+            &:active {
+                transform: scale(1.2);
+            }
+        }
+
+        &::-moz-range-thumb {
+            pointer-events: auto;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: variables.$primary_color;
+            cursor: pointer;
+            border: 2px solid variables.$secondary_color;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+        }
+    }
+
+    &__price-values {
+        @include mixins.center($justifyContent: space-between);
+        font-size: 0.95em;
+        font-weight: 700;
+        color: variables.$primary_color;
+    }
+
+    &__sizes-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        margin-top: 0.75em;
+    }
+
+    &__size-chip {
+        padding: 0.5em 1em;
+        border-radius: 2em;
+        border: 0;
+        background: variables.$dress_style_bg_color;
+        color: variables.$medium_grey_color;
+        font-size: 0.85em;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+
+        &--active {
+            background: variables.$primary_color;
+            color: variables.$secondary_color;
+
+        }
+    }
+
+    &__styles-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
+        margin-top: 0.75em;
+    }
+
+    &__style-button {
+        width: 100%;
+        @include mixins.center($justifyContent: space-between);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        color: variables.$medium_grey_color;
+        font-size: 0.95em;
+        font-family: inherit;
+        padding: 0.25em 0;
+        text-align: left;
+        transition: color 0.15s ease;
+
+        &:hover,
+        &--active {
+            color: variables.$primary_color;
+            font-weight: 700;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
+        margin-top: 0.5em;
+    }
+
+    &__apply-btn {
+        width: 100%;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.85em 2em;
+    }
+
+    &__reset-btn {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        color: variables.$medium_grey_color;
+        font-size: 0.85em;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0.25em;
+        font-family: inherit;
+
+        &:hover {
+            color: variables.$primary_color;
+        }
+    }
+}
+
+/* ==========================================================================
+   Shop Header Component
+   ========================================================================== */
+.shop-header {
+    @include mixins.center($justifyContent: space-between);
+    gap: 1em;
+    flex-wrap: wrap;
+
+    &__title {
+        font-size: 2em;
+        font-weight: 800;
+
+        @media (max-width: 768px) {
+            font-size: 1.6em;
+        }
+    }
+
+    &__right {
+        @include mixins.center;
+        gap: 1em;
+        flex-wrap: wrap;
+    }
+
+    &__count {
+        font-size: 0.9em;
+        color: variables.$medium_grey_color;
+
+        @media (max-width: 576px) {
+            font-size: 0.8em;
+        }
+    }
+
+    &__sort-group {
+        @include mixins.center;
+        gap: 0.5em;
+    }
+
+    &__sort-label {
+        font-size: 0.9em;
+        color: variables.$medium_grey_color;
+        white-space: nowrap;
+    }
+
+    &__sort-select {
+        border: 0;
+        background: transparent;
+        font-family: inherit;
+        font-size: 0.9em;
+        font-weight: 700;
+        cursor: pointer;
+        outline: none;
+        padding: 0.2em 0;
+    }
+
+    &__mobile-filter-btn {
+        display: none;
+        background: variables.$dress_style_bg_color;
+        border: 0;
+        border-radius: 50%;
+        width: 2.25em;
+        height: 2.25em;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        img {
+            width: 1.1em;
+            height: 1.1em;
+        }
+
+        @media (max-width: 992px) {
+            display: inline-flex;
+        }
+    }
+}
+
+/* ==========================================================================
+   Shop Products Grid
+   ========================================================================== */
+.shop-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25em;
+    width: 100%;
+
+    @media (max-width: 1200px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    /* ProductCard inside grid should take 100% of column width */
+    .product-card__item {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+.shop-divider {
+    border: 0;
+    border-top: 1px solid variables.$light_grey_color;
+    width: 100%;
+    margin: 1em 0;
+}
+
+/* ==========================================================================
+   Shop Pagination Component
+   ========================================================================== */
+.shop-pagination {
+    @include mixins.center($justifyContent: space-between);
+    width: 100%;
+    margin-top: 0.5em;
+
+    &__btn {
+        @include mixins.center;
+        gap: 0.5em;
+        border: 1px solid variables.$light_grey_color;
+        border-radius: 0.5em;
+        background: transparent;
+        padding: 0.6em 1em;
+        font-family: inherit;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        &:hover:not(:disabled) {
+            background: variables.$dress_style_bg_color;
+        }
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 576px) {
+            padding: 0.5em 0.75em;
+            font-size: 0.8em;
+        }
+    }
+
+    &__arrow {
+        width: 0.85em;
+        height: 0.85em;
+    }
+
+    &__numbers {
+        @include mixins.center;
+        gap: 0.25em;
+    }
+
+    &__page-btn {
+        border: 0;
+        background: transparent;
+        width: 2.25em;
+        height: 2.25em;
+        border-radius: 0.5em;
+        font-family: inherit;
+        font-size: 0.9em;
+        font-weight: 500;
+        color: variables.$medium_grey_color;
+        cursor: pointer;
+        @include mixins.center;
+        transition: all 0.15s ease;
+
+        &:hover {
+            background: variables.$dress_style_bg_color;
+            color: variables.$primary_color;
+        }
+
+        &--active {
+            background: variables.$dress_style_bg_color;
+            color: variables.$primary_color;
+            font-weight: 700;
+        }
+
+        @media (max-width: 576px) {
+            width: 1.8em;
+            height: 1.8em;
+            font-size: 0.8em;
+        }
+    }
+
+    &__dots {
+        padding: 0 0.25em;
+        color: variables.$medium_grey_color;
+    }
+}
+
+/* ==========================================================================
+   Mobile Filter Drawer
+   ========================================================================== */
+.shop-mobile-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.shop-mobile-drawer {
+    background: variables.$secondary_color;
+    width: 100%;
+    max-width: 360px;
+    height: 100%;
+    overflow-y: auto;
+    padding: 1.5em;
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.15);
+    animation: shopDrawerSlideIn 0.25s ease;
+}
+
+@keyframes shopDrawerSlideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* ==========================================================================
+   Empty & Loading States
+   ========================================================================== */
+.shop-loading,
+.shop-empty {
+    text-align: center;
+    padding: 4em 1em;
+    color: variables.$medium_grey_color;
+    width: 100%;
+
+    h3 {
+        font-size: 1.4em;
+        color: variables.$primary_color;
+        margin-bottom: 0.5em;
+    }
+
+    p {
+        font-size: 0.95em;
+    }
+}

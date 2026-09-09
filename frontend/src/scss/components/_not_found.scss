@@ -1,0 +1,45 @@
+@use '../abstracts/variables' as variables;
+@use '../abstracts/mixins' as mixins;
+@use './button';
+@use './breadcrumbs';
+
+.product-not-found {
+    @include mixins.center($flexDirection: column, $justifyContent: center, $alignItems: center);
+    text-align: center;
+    padding: 6em 1em;
+    gap: 1.25em;
+
+    @media (max-width: 768px) {
+        padding: 4em 1em;
+    }
+
+    &__heading {
+        font-size: 2.5em;
+        font-weight: 700;
+        color: variables.$primary_color;
+        letter-spacing: -0.02em;
+
+        @media (max-width: 768px) {
+            font-size: 1.8em;
+        }
+    }
+
+    &__message {
+        font-size: 1em;
+        color: variables.$medium_grey_color;
+        max-width: 440px;
+        line-height: 1.6;
+    }
+
+    &__action {
+        margin-top: 1em;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+}
