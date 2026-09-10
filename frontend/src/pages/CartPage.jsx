@@ -101,7 +101,6 @@ const CartPage = () => {
                                     </p>
                                     <Link
                                         to="/"
-                                        className="button button--primary"
                                         className="button button--primary cart__empty-action"
                                     >
                                         Explore Products
