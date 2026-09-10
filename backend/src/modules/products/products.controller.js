@@ -85,27 +85,16 @@ export const addProduct = async (req, res) => {
             galleryFiles.map(file => uploadToCloudinary(file.buffer, 'products/gallery'))
         )
 
-        const numPrice = Number(price);
-        let numDiscountPrice = 0;
+        const numPrice = Math.max(0, Number(price) || 0);
         let numDiscountPercentage = 0;
+        let numDiscountPrice = 0;
 
-        if (discountPrice !== undefined && discountPrice !== '' && !isNaN(Number(discountPrice))) {
-            numDiscountPrice = Math.max(0, Number(discountPrice));
-        }
         if (discountPercentage !== undefined && discountPercentage !== '' && !isNaN(Number(discountPercentage))) {
-            numDiscountPercentage = Math.max(0, Math.min(100, Number(discountPercentage)));
-        }
-
-        if (numDiscountPercentage > 0 && (!numDiscountPrice || numDiscountPrice <= 0) && numPrice > 0) {
-            numDiscountPrice = Math.round(numPrice * (1 - numDiscountPercentage / 100));
-        }
-        if (numDiscountPrice > 0 && numDiscountPrice < numPrice && (!numDiscountPercentage || numDiscountPercentage <= 0) && numPrice > 0) {
-            numDiscountPercentage = Math.round(((numPrice - numDiscountPrice) / numPrice) * 100);
-        }
-
-        if (numDiscountPrice >= numPrice) {
-            numDiscountPrice = 0;
-            numDiscountPercentage = 0;
+            const parsedPercent = Math.floor(Number(discountPercentage));
+            if (parsedPercent >= 1 && parsedPercent <= 99 && numPrice > 0) {
+                numDiscountPercentage = parsedPercent;
+                numDiscountPrice = Math.round(numPrice * (1 - numDiscountPercentage / 100));
+            }
         }
 
         const product = await productModel.create({
@@ -181,22 +170,21 @@ export const updateProduct = async (req, res) => {
             updateData.price = Number(price);
         }
 
-        let newDiscountPrice = discountPrice !== undefined ? Number(discountPrice) : existing.discountPrice;
-        let newDiscountPercentage = discountPercentage !== undefined ? Number(discountPercentage) : existing.discountPercentage;
+        if (discountPercentage !== undefined || price !== undefined) {
+            let numDiscountPercentage = 0;
+            let numDiscountPrice = 0;
 
-        if (discountPrice !== undefined || discountPercentage !== undefined || price !== undefined) {
-            if (newDiscountPercentage > 0 && (!newDiscountPrice || newDiscountPrice <= 0) && effectiveBasePrice > 0) {
-                newDiscountPrice = Math.round(effectiveBasePrice * (1 - newDiscountPercentage / 100));
+            const targetPercent = discountPercentage !== undefined ? discountPercentage : existing.discountPercentage;
+            if (targetPercent !== undefined && targetPercent !== '' && !isNaN(Number(targetPercent))) {
+                const parsedPercent = Math.floor(Number(targetPercent));
+                if (parsedPercent >= 1 && parsedPercent <= 99 && effectiveBasePrice > 0) {
+                    numDiscountPercentage = parsedPercent;
+                    numDiscountPrice = Math.round(effectiveBasePrice * (1 - numDiscountPercentage / 100));
+                }
             }
-            if (newDiscountPrice > 0 && newDiscountPrice < effectiveBasePrice && (!newDiscountPercentage || newDiscountPercentage <= 0) && effectiveBasePrice > 0) {
-                newDiscountPercentage = Math.round(((effectiveBasePrice - newDiscountPrice) / effectiveBasePrice) * 100);
-            }
-            if (newDiscountPrice >= effectiveBasePrice) {
-                newDiscountPrice = 0;
-                newDiscountPercentage = 0;
-            }
-            updateData.discountPrice = newDiscountPrice;
-            updateData.discountPercentage = newDiscountPercentage;
+
+            updateData.discountPercentage = numDiscountPercentage;
+            updateData.discountPrice = numDiscountPrice;
         }
 
         if (categories !== undefined) {

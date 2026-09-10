@@ -18,9 +18,6 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
     const [name, setName] = useState(product.name || '');
     const [description, setDescription] = useState(product.description || '');
     const [price, setPrice] = useState(product.price !== undefined ? String(product.price) : '');
-    const [discountPrice, setDiscountPrice] = useState(
-        product.discountPrice !== undefined && product.discountPrice > 0 ? String(product.discountPrice) : ''
-    );
     const [discountPercentage, setDiscountPercentage] = useState(
         product.discountPercentage !== undefined && product.discountPercentage > 0
             ? String(product.discountPercentage)
@@ -60,33 +57,17 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
     };
 
     const handleDiscountPercentageChange = (val) => {
-        setDiscountPercentage(val);
-        const numPercent = Number(val);
-        const numPrice = Number(price);
-        if (numPercent > 0 && numPercent < 100 && numPrice > 0) {
-            setDiscountPrice(String(Math.round(numPrice * (1 - numPercent / 100))));
-        } else if (!val) {
-            setDiscountPrice('');
-        }
-    };
-
-    const handleDiscountPriceChange = (val) => {
-        setDiscountPrice(val);
-        const numDisc = Number(val);
-        const numPrice = Number(price);
-        if (numDisc > 0 && numDisc < numPrice && numPrice > 0) {
-            setDiscountPercentage(String(Math.round(((numPrice - numDisc) / numPrice) * 100)));
-        } else if (!val) {
+        if (val === '') {
             setDiscountPercentage('');
+            return;
         }
-    };
-
-    const handlePriceChange = (val) => {
-        setPrice(val);
-        const numPrice = Number(val);
-        const numPercent = Number(discountPercentage);
-        if (numPercent > 0 && numPercent < 100 && numPrice > 0) {
-            setDiscountPrice(String(Math.round(numPrice * (1 - numPercent / 100))));
+        const parsed = parseInt(val, 10);
+        if (isNaN(parsed) || parsed < 1) {
+            setDiscountPercentage('');
+        } else if (parsed > 99) {
+            setDiscountPercentage('99');
+        } else {
+            setDiscountPercentage(String(parsed));
         }
     };
 
@@ -97,20 +78,29 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
         if (!name.trim()) return setFormError('Product title is required');
         if (!description.trim()) return setFormError('Description is required');
         if (!price || Number(price) < 0) return setFormError('Valid price is required');
-        if (discountPrice && Number(discountPrice) >= Number(price)) {
-            return setFormError('Discount price must be less than regular price');
+        
+        if (discountPercentage) {
+            const d = Number(discountPercentage);
+            if (isNaN(d) || !Number.isInteger(d) || d < 1 || d > 99) {
+                return setFormError('Discount percentage must be a whole number between 1 and 99');
+            }
         }
+
         if (selectedCategories.length === 0) return setFormError('Select at least one category');
         if (variants.length === 0) return setFormError('At least one variant size/quantity is required');
 
         try {
             setSubmitting(true);
+            const numPrice = Number(price);
+            const numPercent = discountPercentage ? parseInt(discountPercentage, 10) : 0;
+            const calculatedDiscountPrice = numPercent > 0 ? Math.round(numPrice * (1 - numPercent / 100)) : 0;
+
             const updatedFields = {
                 name: name.trim(),
                 description: description.trim(),
-                price: Number(price),
-                discountPrice: discountPrice ? Number(discountPrice) : 0,
-                discountPercentage: discountPercentage ? Number(discountPercentage) : 0,
+                price: numPrice,
+                discountPrice: calculatedDiscountPrice,
+                discountPercentage: numPercent,
                 rating: Number(rating),
                 category: selectedCategories,
                 variants: variants.map(v => ({
@@ -162,19 +152,7 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
                                 type="number"
                                 className="admin-form__input"
                                 value={price}
-                                onChange={e => handlePriceChange(e.target.value)}
-                                min="0"
-                            />
-                        </div>
-
-                        <div className="admin-form__field">
-                            <label className="admin-form__label">Discount Price (₹)</label>
-                            <input
-                                type="number"
-                                className="admin-form__input"
-                                placeholder="Optional"
-                                value={discountPrice}
-                                onChange={e => handleDiscountPriceChange(e.target.value)}
+                                onChange={e => setPrice(e.target.value)}
                                 min="0"
                             />
                         </div>
@@ -187,8 +165,9 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
                                 placeholder="Optional"
                                 value={discountPercentage}
                                 onChange={e => handleDiscountPercentageChange(e.target.value)}
-                                min="0"
+                                min="1"
                                 max="99"
+                                step="1"
                             />
                         </div>
 

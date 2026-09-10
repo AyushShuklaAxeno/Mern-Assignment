@@ -17,7 +17,6 @@ const AddProductForm = ({ onClose, onAddProduct, categories }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
-    const [discountPrice, setDiscountPrice] = useState('');
     const [discountPercentage, setDiscountPercentage] = useState('');
     const [rating, setRating] = useState('4.5');
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -74,33 +73,17 @@ const AddProductForm = ({ onClose, onAddProduct, categories }) => {
     };
 
     const handleDiscountPercentageChange = (val) => {
-        setDiscountPercentage(val);
-        const numPercent = Number(val);
-        const numPrice = Number(price);
-        if (numPercent > 0 && numPercent < 100 && numPrice > 0) {
-            setDiscountPrice(String(Math.round(numPrice * (1 - numPercent / 100))));
-        } else if (!val) {
-            setDiscountPrice('');
-        }
-    };
-
-    const handleDiscountPriceChange = (val) => {
-        setDiscountPrice(val);
-        const numDisc = Number(val);
-        const numPrice = Number(price);
-        if (numDisc > 0 && numDisc < numPrice && numPrice > 0) {
-            setDiscountPercentage(String(Math.round(((numPrice - numDisc) / numPrice) * 100)));
-        } else if (!val) {
+        if (val === '') {
             setDiscountPercentage('');
+            return;
         }
-    };
-
-    const handlePriceChange = (val) => {
-        setPrice(val);
-        const numPrice = Number(val);
-        const numPercent = Number(discountPercentage);
-        if (numPercent > 0 && numPercent < 100 && numPrice > 0) {
-            setDiscountPrice(String(Math.round(numPrice * (1 - numPercent / 100))));
+        const parsed = parseInt(val, 10);
+        if (isNaN(parsed) || parsed < 1) {
+            setDiscountPercentage('');
+        } else if (parsed > 99) {
+            setDiscountPercentage('99');
+        } else {
+            setDiscountPercentage(String(parsed));
         }
     };
 
@@ -111,9 +94,14 @@ const AddProductForm = ({ onClose, onAddProduct, categories }) => {
         if (!name.trim()) return setFormError('Product title is required');
         if (!description.trim()) return setFormError('Description is required');
         if (!price || Number(price) < 0) return setFormError('Valid price is required');
-        if (discountPrice && Number(discountPrice) >= Number(price)) {
-            return setFormError('Discount price must be less than regular price');
+        
+        if (discountPercentage) {
+            const d = Number(discountPercentage);
+            if (isNaN(d) || !Number.isInteger(d) || d < 1 || d > 99) {
+                return setFormError('Discount percentage must be a whole number between 1 and 99');
+            }
         }
+
         if (selectedCategories.length === 0) return setFormError('Select at least one category');
         if (!thumbnailFile) return setFormError('Thumbnail image is required');
         if (galleryFiles.length === 0) return setFormError('At least one gallery image is required');
@@ -126,15 +114,19 @@ const AddProductForm = ({ onClose, onAddProduct, categories }) => {
 
         try {
             setSubmitting(true);
+            const numPrice = Number(price);
+            const numPercent = discountPercentage ? parseInt(discountPercentage, 10) : 0;
+            const calculatedDiscountPrice = numPercent > 0 ? Math.round(numPrice * (1 - numPercent / 100)) : 0;
+
             const formData = new FormData();
             formData.append('name', name.trim());
             formData.append('description', description.trim());
-            formData.append('price', String(price));
-            if (discountPrice && Number(discountPrice) > 0) {
-                formData.append('discountPrice', String(discountPrice));
+            formData.append('price', String(numPrice));
+            if (calculatedDiscountPrice > 0) {
+                formData.append('discountPrice', String(calculatedDiscountPrice));
             }
-            if (discountPercentage && Number(discountPercentage) > 0) {
-                formData.append('discountPercentage', String(discountPercentage));
+            if (numPercent > 0) {
+                formData.append('discountPercentage', String(numPercent));
             }
             formData.append('rating', String(rating));
             formData.append('categories', JSON.stringify(selectedCategories));
@@ -193,19 +185,7 @@ const AddProductForm = ({ onClose, onAddProduct, categories }) => {
                                 className="admin-form__input"
                                 placeholder="e.g. 499"
                                 value={price}
-                                onChange={e => handlePriceChange(e.target.value)}
-                                min="0"
-                            />
-                        </div>
-
-                        <div className="admin-form__field">
-                            <label className="admin-form__label">Discount Price (₹)</label>
-                            <input
-                                type="number"
-                                className="admin-form__input"
-                                placeholder="e.g. 399 (Optional)"
-                                value={discountPrice}
-                                onChange={e => handleDiscountPriceChange(e.target.value)}
+                                onChange={e => setPrice(e.target.value)}
                                 min="0"
                             />
                         </div>
@@ -218,8 +198,9 @@ const AddProductForm = ({ onClose, onAddProduct, categories }) => {
                                 placeholder="e.g. 20 (Optional)"
                                 value={discountPercentage}
                                 onChange={e => handleDiscountPercentageChange(e.target.value)}
-                                min="0"
+                                min="1"
                                 max="99"
+                                step="1"
                             />
                         </div>
 
