@@ -126,14 +126,20 @@ export const AdminProductsView = ({
                                             </div>
                                         </td>
                                         <td>
-                                            <span className="admin-table__price">
-                                                ₹{(product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price ? product.discountPrice : product.price)?.toLocaleString('en-IN')}
-                                            </span>
-                                            {product.discountPrice && product.discountPrice > 0 && product.discountPrice < product.price && (
-                                                <div className="admin-table__original-price">
-                                                    ₹{product.price?.toLocaleString('en-IN')}
-                                                    {product.discountPercentage ? ` (-${product.discountPercentage}%)` : ''}
-                                                </div>
+                                            {Boolean(product.discountPrice && Number(product.discountPrice) > 0 && Number(product.discountPrice) < Number(product.price)) ? (
+                                                <>
+                                                    <span className="admin-table__price">
+                                                        ₹{Number(product.discountPrice).toLocaleString('en-IN')}
+                                                    </span>
+                                                    <div className="admin-table__original-price">
+                                                        ₹{Number(product.price).toLocaleString('en-IN')}
+                                                        {product.discountPercentage ? ` (-${product.discountPercentage}%)` : ''}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <span className="admin-table__price">
+                                                    ₹{Number(product.price || 0).toLocaleString('en-IN')}
+                                                </span>
                                             )}
                                         </td>
                                         <td>
