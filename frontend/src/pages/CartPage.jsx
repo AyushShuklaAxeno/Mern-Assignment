@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import FooterSection from '../components/home/FooterSection';
 import { useCart } from '../hooks/CartContext';
@@ -36,7 +36,7 @@ const CartPage = () => {
         return <Navigate to="/login?redirect=/cart" replace />;
     }
 
-    const deliveryFee = cartSubtotal > 0 ? (cartSubtotal >= 1000 ? 0 : 50) : 0;
+    const deliveryFee = cartSubtotal > 0 ? (cartSubtotal >= 1000 ? 0 : 100) : 0;
     const discountAmount = Math.round(cartSubtotal * (discountPercent / 100));
     const totalAmount = Math.max(0, cartSubtotal - discountAmount + deliveryFee);
 

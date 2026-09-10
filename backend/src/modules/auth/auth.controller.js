@@ -45,14 +45,30 @@ export const loginUser = async (req, res) => {
             httpOnly: true
         });
 
+        const userResponse = user.toObject();
+        delete userResponse.password;
 
-        return successResponse(res, 200, "Successfully logged in", user)
+        return successResponse(res, 200, "Successfully logged in", userResponse);
 
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return errorResponse(res, 500, "Internal Server Error");
     }
-}
+};
+
+export const logoutUser = async (req, res) => {
+    try {
+        res.clearCookie("accessToken", {
+            sameSite: 'none',
+            secure: true,
+            httpOnly: true
+        });
+        return successResponse(res, 200, "Successfully logged out");
+    } catch (error) {
+        console.log(error);
+        return errorResponse(res, 500, "Internal Server Error");
+    }
+};
 
 export const registerUser = async (req, res) => {
 
