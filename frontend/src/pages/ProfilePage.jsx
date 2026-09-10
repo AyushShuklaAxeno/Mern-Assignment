@@ -36,9 +36,17 @@ export const ProfilePage = () => {
             <div className="profile-container">
                 {/* Header */}
                 <div className="profile-header">
-                    <div>
-                        <h1 className="profile-header__title">My Account</h1>
-                        <p className="profile-header__email">{user.email}</p>
+                    <div className="profile-header__user-group">
+                        <div className="profile-header__avatar">
+                            {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                            <div className="profile-header__name-row">
+                                <h1 className="profile-header__title">{user.name || 'My Account'}</h1>
+                                <span className="profile-header__badge">Member</span>
+                            </div>
+                            <p className="profile-header__email">{user.email}</p>
+                        </div>
                     </div>
 
                     <button
@@ -53,13 +61,13 @@ export const ProfilePage = () => {
 
                 {/* Content Layout */}
                 <div className="profile-grid">
+                    <div className="profile-grid__main">
+                        <ProfileOrders />
+                    </div>
+
                     <div className="profile-grid__sidebar">
                         <ProfileUserInfo />
                         <ProfileAddress />
-                    </div>
-
-                    <div className="profile-grid__main">
-                        <ProfileOrders />
                     </div>
                 </div>
             </div>

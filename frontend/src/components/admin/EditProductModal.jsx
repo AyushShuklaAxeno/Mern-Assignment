@@ -26,6 +26,7 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
             ? String(product.discountPercentage)
             : ''
     );
+    const [rating, setRating] = useState(String(product.rating || 4.5));
     const [selectedCategories, setSelectedCategories] = useState(product.category || []);
     const [variants, setVariants] = useState(
         product.variants?.length
@@ -110,6 +111,7 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
                 price: Number(price),
                 discountPrice: discountPrice ? Number(discountPrice) : 0,
                 discountPercentage: discountPercentage ? Number(discountPercentage) : 0,
+                rating: Number(rating),
                 category: selectedCategories,
                 variants: variants.map(v => ({
                     size: v.size.toLowerCase().trim(),
@@ -188,6 +190,20 @@ const EditProductForm = ({ onClose, product, onUpdateProduct, categories }) => {
                                 min="0"
                                 max="99"
                             />
+                        </div>
+
+                        <div className="admin-form__field">
+                            <label className="admin-form__label" htmlFor="edit-product-rating">Rating</label>
+                            <select
+                                id="edit-product-rating"
+                                className="admin-form__select"
+                                value={rating}
+                                onChange={e => setRating(e.target.value)}
+                            >
+                                {[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map(value => (
+                                    <option key={value} value={value}>{value} / 5 stars</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
 

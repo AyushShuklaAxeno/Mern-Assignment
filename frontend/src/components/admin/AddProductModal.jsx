@@ -2,11 +2,24 @@ import { useState } from 'react';
 import { X, Plus, Trash2, UploadCloud, Image as ImageIcon } from 'lucide-react';
 
 export const AddProductModal = ({ isOpen, onClose, onAddProduct, categories }) => {
+    if (!isOpen) return null;
+
+    return (
+        <AddProductForm
+            onClose={onClose}
+            onAddProduct={onAddProduct}
+            categories={categories}
+        />
+    );
+};
+
+const AddProductForm = ({ onClose, onAddProduct, categories }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [discountPrice, setDiscountPrice] = useState('');
     const [discountPercentage, setDiscountPercentage] = useState('');
+    const [rating, setRating] = useState('4.5');
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [variants, setVariants] = useState([
         { size: 'Small', quantity: 10 },
@@ -19,8 +32,6 @@ export const AddProductModal = ({ isOpen, onClose, onAddProduct, categories }) =
     const [galleryPreviews, setGalleryPreviews] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [formError, setFormError] = useState('');
-
-    if (!isOpen) return null;
 
     const handleCategoryToggle = (catId) => {
         setSelectedCategories(prev =>
@@ -125,6 +136,7 @@ export const AddProductModal = ({ isOpen, onClose, onAddProduct, categories }) =
             if (discountPercentage && Number(discountPercentage) > 0) {
                 formData.append('discountPercentage', String(discountPercentage));
             }
+            formData.append('rating', String(rating));
             formData.append('categories', JSON.stringify(selectedCategories));
             formData.append(
                 'variants',
@@ -209,6 +221,20 @@ export const AddProductModal = ({ isOpen, onClose, onAddProduct, categories }) =
                                 min="0"
                                 max="99"
                             />
+                        </div>
+
+                        <div className="admin-form__field">
+                            <label className="admin-form__label" htmlFor="add-product-rating">Rating</label>
+                            <select
+                                id="add-product-rating"
+                                className="admin-form__select"
+                                value={rating}
+                                onChange={e => setRating(e.target.value)}
+                            >
+                                {[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map(value => (
+                                    <option key={value} value={value}>{value} / 5 stars</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
 
@@ -299,7 +325,7 @@ export const AddProductModal = ({ isOpen, onClose, onAddProduct, categories }) =
                     {/* Image Uploads */}
                     <div className="admin-form__row">
                         <div className="admin-form__field">
-                            <label className="admin-form__label">Main Thumbnail Image *</label>
+                            <label className="admin-form__label">Main Image *</label>
                             <div className="admin-file-box">
                                 {thumbnailPreview ? (
                                     <div className="admin-file-preview">
@@ -317,7 +343,7 @@ export const AddProductModal = ({ isOpen, onClose, onAddProduct, categories }) =
                                 ) : (
                                     <label className="admin-file-dropzone">
                                         <UploadCloud size={28} />
-                                        <span>Click to upload main thumbnail</span>
+                                        <span>Click to upload main image</span>
                                         <input
                                             type="file"
                                             accept="image/*"
@@ -330,7 +356,7 @@ export const AddProductModal = ({ isOpen, onClose, onAddProduct, categories }) =
                         </div>
 
                         <div className="admin-form__field">
-                            <label className="admin-form__label">Gallery Images (1-5 images) *</label>
+                            <label className="admin-form__label">Side Images (Only 1-5 images) *</label>
                             <div className="admin-file-box">
                                 {galleryPreviews.length > 0 ? (
                                     <div className="admin-gallery-previews">

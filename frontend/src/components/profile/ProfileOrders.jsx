@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Package } from 'lucide-react';
+import { Package, ShoppingBag } from 'lucide-react';
 import { useOrders } from '../../hooks/OrderContext';
 
 export const ProfileOrders = () => {
@@ -43,7 +43,12 @@ export const ProfileOrders = () => {
     return (
         <section className="profile-card">
             <div className="profile-card__header">
-                <h2 className="profile-card__title">Orders</h2>
+                <div className="profile-card__title-group">
+                    <div className="profile-card__icon-wrap">
+                        <ShoppingBag size={18} />
+                    </div>
+                    <h2 className="profile-card__title">Order History</h2>
+                </div>
             </div>
 
             {loading && (!myOrders || myOrders.length === 0) ? (

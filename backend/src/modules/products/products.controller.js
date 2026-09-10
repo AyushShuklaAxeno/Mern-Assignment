@@ -1,11 +1,18 @@
+import mongoose from "mongoose";
 import { categoryModel } from "../../models/category.schema.js"
 import { productModel } from "../../models/product.schema.js"
 import { errorResponse, successResponse } from "../../utility/apiResponse.js"
 import { uploadToCloudinary } from "../../utility/uploadToCloudinary.js"
 
+const normalizeRating = (value, fallback = 4.5) => {
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) return fallback;
+    return Math.min(5, Math.max(1, Math.round(parsed * 2) / 2));
+}
+
 export const addProduct = async (req, res) => {
     try {
-        const { name, description, price, categories, variants, discountPrice, discountPercentage } = req.body ?? {}
+        const { name, description, price, categories, variants, discountPrice, discountPercentage, rating } = req.body ?? {}
         console.log(req.body)
         const errors = []
 
@@ -107,6 +114,7 @@ export const addProduct = async (req, res) => {
             price: numPrice,
             discountPrice: numDiscountPrice,
             discountPercentage: numDiscountPercentage,
+            rating: normalizeRating(rating),
             thumbnailImage: thumbnailUpload.secure_url,
             galleryImages: galleryUploads.map(img => img.secure_url),
             category: categoryIds,
@@ -151,7 +159,7 @@ export const deleteProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        const { productId, id, name, description, price, discountPrice, discountPercentage, categories, variants, status } = req.body ?? {};
+        const { productId, id, name, description, price, discountPrice, discountPercentage, rating, categories, variants, status } = req.body ?? {};
         const targetId = productId || id;
         if (!targetId) {
             return errorResponse(res, 400, "Product ID is required");
@@ -166,6 +174,7 @@ export const updateProduct = async (req, res) => {
         if (name !== undefined) updateData.name = name.trim();
         if (description !== undefined) updateData.description = description.trim();
         if (status !== undefined) updateData.status = status;
+        if (rating !== undefined) updateData.rating = normalizeRating(rating, existing.rating);
 
         const effectiveBasePrice = price !== undefined ? Number(price) : existing.price;
         if (price !== undefined) {
@@ -224,7 +233,7 @@ export const fetchAllProducts = async (req, res) => {
             maxPrice,
             size,
             dressStyle,
-            sort = 'popular',
+            sort = 'newest',
             search,
             all = 'false'
         } = req.query;
@@ -243,7 +252,7 @@ export const fetchAllProducts = async (req, res) => {
         // Category filter
         if (category) {
             if (category.match(/^[0-9a-fA-F]{24}$/)) {
-                filter.category = category;
+                filter.category = new mongoose.Types.ObjectId(category);
             } else {
                 const foundCategory = await categoryModel.findOne({ name: category.toLowerCase().trim() });
                 if (foundCategory) {
@@ -274,20 +283,6 @@ export const fetchAllProducts = async (req, res) => {
             }
         }
 
-        // Price filter
-        if (minPrice !== undefined || maxPrice !== undefined) {
-            filter.price = {};
-            if (minPrice !== undefined && minPrice !== '' && !isNaN(Number(minPrice))) {
-                filter.price.$gte = Number(minPrice);
-            }
-            if (maxPrice !== undefined && maxPrice !== '' && !isNaN(Number(maxPrice))) {
-                filter.price.$lte = Number(maxPrice);
-            }
-            if (Object.keys(filter.price).length === 0) {
-                delete filter.price;
-            }
-        }
-
         // Size filter (matches inside variants.size, lowercase)
         if (size) {
             filter['variants.size'] = size.toString().toLowerCase().trim();
@@ -301,30 +296,104 @@ export const fetchAllProducts = async (req, res) => {
             ];
         }
 
-        // Sorting
-        let sortCriteria = { createdAt: -1 };
-        if (sort === 'price-asc' || sort === 'low-to-high') {
-            sortCriteria = { price: 1 };
-        } else if (sort === 'price-desc' || sort === 'high-to-low') {
-            sortCriteria = { price: -1 };
-        } else if (sort === 'newest') {
-            sortCriteria = { createdAt: -1 };
-        }
-
         const pageNumber = Math.max(1, parseInt(page, 10) || 1);
         const pageSize = Math.max(1, parseInt(limit, 10) || 9);
         const skip = (pageNumber - 1) * pageSize;
 
-        const [products, totalProducts] = await Promise.all([
-            productModel
-                .find(filter)
-                .populate('category', 'name')
-                .sort(sortCriteria)
-                .skip(skip)
-                .limit(pageSize),
-            productModel.countDocuments(filter)
+        // Effective price calculation (matches UI display: discounted price if available, else original price)
+        const effectivePriceExpr = {
+            $cond: [
+                {
+                    $and: [
+                        { $gt: ["$discountPrice", 0] },
+                        { $lt: ["$discountPrice", "$price"] }
+                    ]
+                },
+                "$discountPrice",
+                {
+                    $cond: [
+                        {
+                            $and: [
+                                { $gt: ["$discountPercentage", 0] },
+                                { $lt: ["$discountPercentage", 100] }
+                            ]
+                        },
+                        {
+                            $round: [
+                                {
+                                    $multiply: [
+                                        "$price",
+                                        { $subtract: [1, { $divide: ["$discountPercentage", 100] }] }
+                                    ]
+                                },
+                                0
+                            ]
+                        },
+                        "$price"
+                    ]
+                }
+            ]
+        };
+
+        const pipeline = [
+            { $match: filter },
+            {
+                $addFields: {
+                    effectivePrice: effectivePriceExpr
+                }
+            }
+        ];
+
+        // Price range filter on effective price
+        if (minPrice !== undefined && minPrice !== '' && !isNaN(Number(minPrice))) {
+            pipeline.push({ $match: { effectivePrice: { $gte: Number(minPrice) } } });
+        }
+        if (maxPrice !== undefined && maxPrice !== '' && !isNaN(Number(maxPrice))) {
+            pipeline.push({ $match: { effectivePrice: { $lte: Number(maxPrice) } } });
+        }
+
+        // Sorting
+        let sortStage = { createdAt: -1 };
+        if (sort === 'price-asc' || sort === 'low-to-high') {
+            sortStage = { effectivePrice: 1, createdAt: -1 };
+        } else if (sort === 'price-desc' || sort === 'high-to-low') {
+            sortStage = { effectivePrice: -1, createdAt: -1 };
+        } else if (sort === 'rating-desc' || sort === 'rating-high-to-low') {
+            sortStage = { rating: -1, createdAt: -1 };
+        } else if (sort === 'rating-asc' || sort === 'rating-low-to-high') {
+            sortStage = { rating: 1, createdAt: -1 };
+        } else if (sort === 'newest') {
+            sortStage = { createdAt: -1 };
+        } else if (sort === 'popular') {
+            sortStage = { rating: -1, createdAt: -1 };
+        }
+
+        pipeline.push({ $sort: sortStage });
+
+        const [result] = await productModel.aggregate([
+            ...pipeline,
+            {
+                $facet: {
+                    metadata: [{ $count: "total" }],
+                    data: [
+                        { $skip: skip },
+                        { $limit: pageSize },
+                        {
+                            $lookup: {
+                                from: "categories",
+                                localField: "category",
+                                foreignField: "_id",
+                                as: "category",
+                                pipeline: [{ $project: { _id: 1, name: 1 } }]
+                            }
+                        }
+                    ]
+                }
+            }
         ]);
 
+        const totalProducts = result?.metadata?.[0]?.total || 0;
+        const products = result?.data || [];
         const totalPages = Math.ceil(totalProducts / pageSize);
 
         return successResponse(res, 200, "Successfully fetched products", {

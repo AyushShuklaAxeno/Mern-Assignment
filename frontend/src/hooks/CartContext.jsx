@@ -5,6 +5,33 @@ import api from '../lib/api';
 
 export const CartContext = createContext(null);
 
+const mapServerItems = (items) => {
+    if (!Array.isArray(items)) return [];
+    return items.map(item => {
+        const prod = item.product || {};
+        const effectivePrice = (prod.discountPrice && Number(prod.discountPrice) > 0 && Number(prod.discountPrice) < Number(prod.price))
+            ? Number(prod.discountPrice)
+            : (Number(prod.price) || 0);
+
+        const variant = Array.isArray(prod.variants)
+            ? prod.variants.find(v => v.size?.toLowerCase() === item.size?.toLowerCase())
+            : null;
+        const maxStock = variant !== undefined && variant !== null ? Number(variant.quantity) : 999;
+
+        return {
+            productId: prod._id || prod,
+            name: prod.name || 'Product',
+            price: effectivePrice,
+            thumbnailImage: prod.thumbnailImage || '',
+            size: item.size,
+            color: '',
+            quantity: item.quantity,
+            maxStock,
+            variants: prod.variants || [],
+        };
+    });
+};
+
 export const CartContextProvider = ({ children }) => {
     const { user } = useAuth();
     const [cartItems, setCartItems] = useState([]);
@@ -24,23 +51,7 @@ export const CartContextProvider = ({ children }) => {
             try {
                 const res = await api.get('/cart');
                 if (isMounted && res.data?.success && Array.isArray(res.data.data?.items)) {
-                    const serverItems = res.data.data.items.map(item => {
-                        const prod = item.product || {};
-                        const effectivePrice = (prod.discountPrice && Number(prod.discountPrice) > 0 && Number(prod.discountPrice) < Number(prod.price))
-                            ? Number(prod.discountPrice)
-                            : (Number(prod.price) || 0);
-
-                        return {
-                            productId: prod._id || prod,
-                            name: prod.name || 'Product',
-                            price: effectivePrice,
-                            thumbnailImage: prod.thumbnailImage || '',
-                            size: item.size,
-                            color: '',
-                            quantity: item.quantity,
-                        };
-                    });
-                    setCartItems(serverItems);
+                    setCartItems(mapServerItems(res.data.data.items));
                 } else if (isMounted) {
                     setCartItems([]);
                 }
@@ -58,12 +69,18 @@ export const CartContextProvider = ({ children }) => {
     }, [user]);
 
     const addToCart = useCallback(async ({ product, size, color, quantity = 1 }) => {
+        if (!user) return;
         if (!product || !size) return;
 
         const productId = product._id || product.id || product.productId;
         const normalizedSize = String(size).trim();
         const normalizedColor = color ? String(color).trim() : '';
         const qty = Math.max(1, Number(quantity) || 1);
+
+        const variant = Array.isArray(product.variants)
+            ? product.variants.find(v => v.size?.toLowerCase() === normalizedSize.toLowerCase())
+            : null;
+        const maxStock = variant !== undefined && variant !== null ? Number(variant.quantity) : 999;
 
         setCartItems(prev => {
             const existingIndex = prev.findIndex(
@@ -75,9 +92,13 @@ export const CartContextProvider = ({ children }) => {
 
             if (existingIndex > -1) {
                 const next = [...prev];
+                const currentItem = next[existingIndex];
+                const limit = currentItem.maxStock !== undefined ? currentItem.maxStock : maxStock;
+                const newQty = Math.min(currentItem.quantity + qty, limit);
                 next[existingIndex] = {
-                    ...next[existingIndex],
-                    quantity: next[existingIndex].quantity + qty,
+                    ...currentItem,
+                    quantity: newQty,
+                    maxStock: limit,
                 };
                 return next;
             }
@@ -98,7 +119,9 @@ export const CartContextProvider = ({ children }) => {
                     thumbnailImage: product.thumbnailImage || '',
                     size: normalizedSize,
                     color: normalizedColor,
-                    quantity: qty,
+                    quantity: Math.min(qty, maxStock),
+                    maxStock,
+                    variants: product.variants || [],
                 },
             ];
         });
@@ -111,8 +134,18 @@ export const CartContextProvider = ({ children }) => {
                     size: normalizedSize,
                     quantity: qty,
                 });
+                const res = await api.get('/cart');
+                if (res.data?.success && Array.isArray(res.data.data?.items)) {
+                    setCartItems(mapServerItems(res.data.data.items));
+                }
             } catch (err) {
                 console.error('Failed to sync added item with server', err);
+                try {
+                    const res = await api.get('/cart');
+                    if (res.data?.success && Array.isArray(res.data.data?.items)) {
+                        setCartItems(mapServerItems(res.data.data.items));
+                    }
+                } catch {}
             }
         }
     }, [user]);
@@ -146,6 +179,20 @@ export const CartContextProvider = ({ children }) => {
     const increaseQuantity = useCallback(async (productId, size, color) => {
         const normalizedSize = size ? String(size).trim() : '';
 
+        const currentItem = cartItems.find(
+            item =>
+                item.productId === productId &&
+                item.size.toLowerCase() === normalizedSize.toLowerCase() &&
+                (!color || item.color === color)
+        );
+
+        if (!currentItem) return;
+
+        // If current quantity is already at or above maximum available stock, do not increase
+        if (currentItem.maxStock !== undefined && currentItem.quantity >= currentItem.maxStock) {
+            return;
+        }
+
         setCartItems(prev =>
             prev.map(item => {
                 if (
@@ -153,6 +200,8 @@ export const CartContextProvider = ({ children }) => {
                     item.size.toLowerCase() === normalizedSize.toLowerCase() &&
                     (!color || item.color === color)
                 ) {
+                    const limit = item.maxStock !== undefined ? item.maxStock : 999;
+                    if (item.quantity >= limit) return item;
                     return { ...item, quantity: item.quantity + 1 };
                 }
                 return item;
@@ -164,9 +213,15 @@ export const CartContextProvider = ({ children }) => {
                 await api.patch(`/cart/item/${productId}/increase`, { size: normalizedSize });
             } catch (err) {
                 console.error('Failed to increase item quantity on server', err);
+                try {
+                    const res = await api.get('/cart');
+                    if (res.data?.success && Array.isArray(res.data.data?.items)) {
+                        setCartItems(mapServerItems(res.data.data.items));
+                    }
+                } catch {}
             }
         }
-    }, [user]);
+    }, [cartItems, user]);
 
     const decreaseQuantity = useCallback(async (productId, size, color) => {
         const normalizedSize = size ? String(size).trim() : '';

@@ -12,20 +12,20 @@ export const AdminHeader = () => {
     };
 
     return (
-        <header className="admin-header">
+        <header className="admin-header admin-header--utility">
             <div className="admin-header__brand">
                 <Link to="/admin" className="admin-header__logo">
                     SHOP.CO
                 </Link>
                 <span className="admin-header__badge">
                     <ShieldCheck size={14} />
-                    ADMIN PORTAL
+                    <span className="admin-header__badge-text">ADMIN PORTAL</span>
                 </span>
             </div>
 
             <div className="admin-header__actions">
                 <Link to="/" className="admin-header__link" title="Visit Public Store">
-                    <span>View Store</span>
+                    <span>Go to Store</span>
                     <ExternalLink size={14} />
                 </Link>
 

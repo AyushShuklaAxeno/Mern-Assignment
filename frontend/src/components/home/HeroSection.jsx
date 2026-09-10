@@ -5,11 +5,6 @@ import heroStarIcon from '../../assests/icons/hero_star_icon.svg';
 export const HeroSection = ({ onShopNow }) => {
     return (
         <section className="hero">
-            <picture className="hero__banner-picture">
-                <source media="(max-width: 767px)" srcSet={heroBannerMobile} />
-                <img src={heroBanner} className="hero__banner" alt="Model wearing featured outfit" />
-            </picture>
-
             <div className="hero__content-container">
                 <div className="hero__text-block">
                     <div className="hero__intro">
@@ -27,7 +22,7 @@ export const HeroSection = ({ onShopNow }) => {
                             className="button button--primary hero__cta-button"
                             onClick={onShopNow}
                         >
-                            Shop now
+                            Shop Now
                         </button>
                     </div>
 
@@ -37,21 +32,32 @@ export const HeroSection = ({ onShopNow }) => {
                             <p className="hero__stat-label">International Brands</p>
                         </li>
 
+                        <li className="hero__stat-divider" aria-hidden="true" />
+
                         <li className="hero__stat">
                             <span className="hero__stat-number">2,000+</span>
                             <p className="hero__stat-label">High-Quality Products</p>
                         </li>
 
-                        <li className="hero__stat">
+                        <li className="hero__stat-divider hero__stat-divider--desktop" aria-hidden="true" />
+
+                        <li className="hero__stat hero__stat--full">
                             <span className="hero__stat-number">30,000+</span>
                             <p className="hero__stat-label">Happy Customers</p>
                         </li>
                     </ul>
                 </div>
 
-                <div className="hero__decoration">
-                    <img src={heroStarIcon} className="hero__star-icon_1" alt="" />
-                    <img src={heroStarIcon} className="hero__star-icon_2" alt="" />
+                <div className="hero__image-wrapper">
+                    <picture className="hero__banner-picture">
+                        <source media="(max-width: 768px)" srcSet={heroBannerMobile} />
+                        <img src={heroBanner} className="hero__banner" alt="Model wearing featured outfit" />
+                    </picture>
+
+                    <div className="hero__decoration">
+                        <img src={heroStarIcon} className="hero__star-icon hero__star-icon--small" alt="" />
+                        <img src={heroStarIcon} className="hero__star-icon hero__star-icon--large" alt="" />
+                    </div>
                 </div>
             </div>
         </section>

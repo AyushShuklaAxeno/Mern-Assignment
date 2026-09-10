@@ -5,76 +5,129 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: #fafafa;
+    background: #FAFAFA;
 }
 
 .profile-container {
     flex: 1;
     width: 100%;
-    max-width: 1120px;
+    max-width: 1180px;
     margin: 0 auto;
+    padding: 2.75rem 2rem 7.5rem; // Ample gap before newsletter footer
 
     @media (max-width: 992px) {
-        padding: 2em variables.$container_padding_x_tablet 4em;
+        padding: 2rem variables.$container_padding_x_tablet 6rem;
     }
 
     @media (max-width: 576px) {
-        padding: 1.5em variables.$container_padding_x_mobile 3em;
+        padding: 1.5rem variables.$container_padding_x_mobile 5rem;
     }
 }
 
 .profile-loading-screen {
     @include mixins.center;
     min-height: 50vh;
-    font-size: 1em;
+    font-size: 1rem;
     color: variables.$medium_grey_color;
 }
 
+/* ==========================================================================
+   Profile Header (Avatar, Member Badge, Actions)
+   ========================================================================== */
 .profile-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1em;
-    margin-bottom: 2em;
-    padding-bottom: 1.25em;
-    border-bottom: 1px solid variables.$light_grey_color;
+    gap: 1.5rem;
+    margin-bottom: 2.25rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    @media (max-width: 576px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    &__user-group {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    &__avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: variables.$primary_color;
+        color: variables.$secondary_color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+        flex-shrink: 0;
+    }
+
+    &__name-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
 
     &__title {
-        font-size: 1.75em;
-        font-weight: 800;
-        letter-spacing: -0.5px;
+        font-size: 1.85rem;
+        font-weight: 900;
+        letter-spacing: -0.03em;
         color: variables.$primary_color;
-        margin-bottom: 0.15em;
+        line-height: 1.15;
+    }
 
-        @media (max-width: 576px) {
-            font-size: 1.4em;
-        }
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        background: variables.$dress_style_bg_color;
+        color: variables.$primary_color;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
     }
 
     &__email {
-        font-size: 0.9em;
+        font-size: 0.9rem;
         color: variables.$medium_grey_color;
+        margin-top: 0.2rem;
     }
 }
 
 .profile-logout-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.4em;
-    padding: 0.5em 1em;
-    border-radius: 62px;
-    border: 1px solid variables.$light_grey_color;
+    gap: 0.45rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 999px;
+    border: 1px solid variables.$neutral_light_4;
     background: variables.$secondary_color;
     color: variables.$primary_color;
     font-family: inherit;
-    font-size: 0.85em;
-    font-weight: 500;
+    font-size: 0.88rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 
     &:hover {
-        background: #f5f5f5;
-        border-color: variables.$grey_color_1;
+        background: variables.$primary_color;
+        color: variables.$secondary_color;
+        border-color: variables.$primary_color;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 }
 
@@ -83,54 +136,78 @@
    ========================================================================== */
 .profile-grid {
     display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 1.75em;
+    grid-template-columns: 1fr 380px;
+    gap: 1.75rem;
     align-items: start;
 
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
         grid-template-columns: 1fr;
-        gap: 1.5em;
-    }
-
-    &__sidebar {
-        display: flex;
-        flex-direction: column;
-        gap: 1.25em;
+        gap: 1.5rem;
     }
 
     &__main {
         display: flex;
         flex-direction: column;
-        gap: 1.25em;
+        gap: 1.5rem;
+    }
+
+    &__sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 }
 
 /* ==========================================================================
-   Card Common
+   Modern Card Style
    ========================================================================== */
 .profile-card {
     background: variables.$secondary_color;
-    border: 1px solid variables.$light_grey_color;
-    border-radius: 14px;
-    padding: 1.4em 1.5em;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 20px;
+    padding: 1.6rem 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
 
     @media (max-width: 576px) {
-        padding: 1.2em;
-        border-radius: 12px;
+        padding: 1.25rem;
+        border-radius: 16px;
     }
 
     &__header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 1.1em;
+        margin-bottom: 1.25rem;
+    }
+
+    &__title-group {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    &__icon-wrap {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: variables.$dress_style_bg_color;
+        color: variables.$primary_color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
     }
 
     &__title {
-        font-size: 1.05em;
-        font-weight: 700;
+        font-size: 1.12rem;
+        font-weight: 800;
         color: variables.$primary_color;
-        letter-spacing: -0.2px;
+        letter-spacing: -0.01em;
     }
 }
 
@@ -140,17 +217,20 @@
 .profile-btn-action {
     background: none;
     border: none;
-    padding: 0.25em 0.5em;
+    padding: 0.35rem 0.65rem;
     font-family: inherit;
-    font-size: 0.85em;
-    font-weight: 600;
+    font-size: 0.82rem;
+    font-weight: 700;
     color: variables.$primary_color;
     cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 6px;
+    transition: background 0.15s ease;
 
     &:hover {
-        opacity: 0.7;
+        background: variables.$dress_style_bg_color;
     }
 }
 
@@ -160,18 +240,19 @@
     justify-content: center;
     background: variables.$primary_color;
     color: variables.$secondary_color;
-    padding: 0.55em 1.2em;
-    border-radius: 8px;
+    padding: 0.65rem 1.4rem;
+    border-radius: 999px;
     font-family: inherit;
-    font-size: 0.85em;
-    font-weight: 600;
+    font-size: 0.88rem;
+    font-weight: 700;
     border: none;
     cursor: pointer;
     text-decoration: none;
-    transition: opacity 0.15s ease;
+    transition: transform 0.15s ease, background 0.15s ease;
 
     &:hover:not(:disabled) {
-        opacity: 0.85;
+        background: variables.$primary_hover_color;
+        transform: translateY(-1px);
     }
 
     &:disabled {
@@ -186,17 +267,18 @@
     justify-content: center;
     background: transparent;
     color: variables.$primary_color;
-    padding: 0.55em 1.1em;
-    border-radius: 8px;
+    padding: 0.65rem 1.25rem;
+    border-radius: 999px;
     font-family: inherit;
-    font-size: 0.85em;
-    font-weight: 500;
-    border: 1px solid variables.$light_grey_color;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border: 1px solid variables.$neutral_light_4;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: all 0.15s ease;
 
     &:hover:not(:disabled) {
-        background: #f5f5f5;
+        background: variables.$dress_style_bg_color;
+        border-color: variables.$neutral_mid_2;
     }
 
     &:disabled {
@@ -209,21 +291,22 @@
    Alerts / Feedback Messages
    ========================================================================== */
 .profile-msg {
-    padding: 0.6em 0.85em;
-    border-radius: 8px;
-    font-size: 0.82em;
-    margin-bottom: 0.9em;
+    padding: 0.65rem 0.95rem;
+    border-radius: 10px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
 
     &--success {
-        background: #f0fdf4;
-        color: #166534;
-        border: 1px solid #bbf7d0;
+        background: variables.$success_bg_color;
+        color: variables.$success_text_color;
+        border: 1px solid variables.$success_border_color;
     }
 
     &--error {
-        background: #fef2f2;
-        color: #991b1b;
-        border: 1px solid #fecaca;
+        background: variables.$error_bg_color;
+        color: variables.$error_text_color;
+        border: 1px solid variables.$error_border_color;
     }
 }
 
@@ -233,29 +316,26 @@
 .profile-info-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75em;
+    gap: 0.65rem;
 }
 
 .profile-info-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.9em;
-    padding-bottom: 0.5em;
-    border-bottom: 1px solid #f2f2f2;
-
-    &:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
+    font-size: 0.92rem;
+    padding: 0.65rem 0.85rem;
+    background: variables.$neutral_light_0;
+    border-radius: 10px;
 
     &__label {
         color: variables.$medium_grey_color;
-        font-size: 0.85em;
+        font-size: 0.84rem;
+        font-weight: 600;
     }
 
     &__value {
-        font-weight: 600;
+        font-weight: 700;
         color: variables.$primary_color;
         text-align: right;
     }
@@ -267,22 +347,29 @@
 .profile-address-box {
     display: flex;
     flex-direction: column;
-    gap: 0.25em;
-    font-size: 0.9em;
-    line-height: 1.4;
+    gap: 0.35rem;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    background: variables.$neutral_light_0;
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
 
     &__street {
-        font-weight: 600;
+        font-weight: 800;
         color: variables.$primary_color;
     }
 
     &__city {
-        color: variables.$medium_grey_color;
+        color: variables.$neutral_mid_4;
+        font-weight: 500;
     }
 
     &__country {
-        color: variables.$medium_grey_color;
-        font-size: 0.85em;
+        color: variables.$neutral_mid_2;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -290,9 +377,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.88em;
+    font-size: 0.9rem;
     color: variables.$medium_grey_color;
-    padding: 0.5em 0;
+    padding: 0.85rem 1rem;
+    background: variables.$neutral_light_0;
+    border-radius: 12px;
 }
 
 /* ==========================================================================
@@ -301,20 +390,20 @@
 .profile-edit-form {
     display: flex;
     flex-direction: column;
-    gap: 0.85em;
+    gap: 0.85rem;
 
     &__actions {
         display: flex;
         justify-content: flex-end;
-        gap: 0.6em;
-        margin-top: 0.4em;
+        gap: 0.6rem;
+        margin-top: 0.4rem;
     }
 }
 
 .profile-field-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.6em;
+    gap: 0.6rem;
 
     @media (max-width: 480px) {
         grid-template-columns: 1fr;
@@ -324,28 +413,28 @@
 .profile-field {
     display: flex;
     flex-direction: column;
-    gap: 0.3em;
+    gap: 0.3rem;
 
     &__label {
-        font-size: 0.78em;
-        font-weight: 600;
+        font-size: 0.78rem;
+        font-weight: 700;
         color: variables.$medium_grey_color;
     }
 
     &__input {
         width: 100%;
-        padding: 0.55em 0.75em;
-        border-radius: 8px;
-        border: 1px solid variables.$light_grey_color;
-        background: #fafafa;
+        padding: 0.65rem 0.85rem;
+        border-radius: 10px;
+        border: 1.5px solid variables.$neutral_light_4;
+        background: variables.$secondary_color;
         font-family: inherit;
-        font-size: 0.88em;
+        font-size: 0.9rem;
         outline: none;
-        transition: border-color 0.15s ease, background 0.15s ease;
+        transition: all 0.15s ease;
 
         &:focus {
             border-color: variables.$primary_color;
-            background: variables.$secondary_color;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
         }
     }
 }
@@ -354,95 +443,105 @@
    Orders Section
    ========================================================================== */
 .profile-state-text {
-    padding: 2.5em 1em;
+    padding: 3rem 1rem;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 0.92rem;
     color: variables.$medium_grey_color;
 }
 
 .profile-orders-empty {
-    padding: 3em 1em;
+    padding: 3.5rem 1.5rem;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1em;
+    gap: 1.25rem;
 
     p {
-        font-size: 0.95em;
+        font-size: 0.95rem;
         color: variables.$medium_grey_color;
+        font-weight: 500;
     }
 }
 
 .profile-orders-list {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1.15rem;
 }
 
 .profile-order-item-card {
-    border: 1px solid #ebebeb;
-    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
     background: variables.$secondary_color;
     overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
 
     &__header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.75em 1em;
-        background: #fbfbfb;
-        border-bottom: 1px solid #f0f0f0;
+        padding: 0.9rem 1.25rem;
+        background: variables.$neutral_light_1;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     }
 
     &__id {
-        font-size: 0.85em;
-        font-weight: 700;
+        font-size: 0.9rem;
+        font-weight: 800;
         color: variables.$primary_color;
-        margin-right: 0.6em;
+        margin-right: 0.6rem;
     }
 
     &__date {
-        font-size: 0.8em;
+        font-size: 0.82rem;
         color: variables.$medium_grey_color;
+        font-weight: 500;
     }
 
     &__items {
-        padding: 0.85em 1em;
+        padding: 1rem 1.25rem;
         display: flex;
         flex-direction: column;
-        gap: 0.75em;
+        gap: 0.9rem;
     }
 
     &__footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.75em 1em;
-        border-top: 1px solid #f0f0f0;
-        font-size: 0.85em;
+        padding: 0.85rem 1.25rem;
+        background: variables.$neutral_light_0;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        font-size: 0.88rem;
     }
 
     &__dest {
         color: variables.$medium_grey_color;
-        font-size: 0.8em;
+        font-size: 0.82rem;
+        font-weight: 500;
     }
 
     &__total {
         display: flex;
         align-items: center;
-        gap: 0.4em;
+        gap: 0.45rem;
         margin-left: auto;
 
         span {
             color: variables.$medium_grey_color;
-            font-size: 0.85em;
+            font-size: 0.85rem;
         }
 
         strong {
             color: variables.$primary_color;
-            font-size: 1.05em;
-            font-weight: 700;
+            font-size: 1.15rem;
+            font-weight: 900;
         }
     }
 }
@@ -453,12 +552,12 @@
 .profile-product-row {
     display: flex;
     align-items: center;
-    gap: 0.85em;
+    gap: 1rem;
 
     &__thumb {
-        width: 44px;
-        height: 44px;
-        border-radius: 6px;
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
         background: variables.$product_bg_color;
         overflow: hidden;
         display: flex;
@@ -480,25 +579,26 @@
     }
 
     &__name {
-        font-size: 0.88em;
-        font-weight: 600;
+        font-size: 0.92rem;
+        font-weight: 700;
         color: variables.$primary_color;
-        margin-bottom: 0.15em;
+        margin-bottom: 0.2rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     &__meta {
-        font-size: 0.78em;
+        font-size: 0.8rem;
         color: variables.$medium_grey_color;
         display: flex;
-        gap: 0.6em;
+        gap: 0.75rem;
+        font-weight: 500;
     }
 
     &__price {
-        font-size: 0.88em;
-        font-weight: 600;
+        font-size: 0.95rem;
+        font-weight: 800;
         color: variables.$primary_color;
         white-space: nowrap;
     }
@@ -510,34 +610,35 @@
 .profile-status {
     display: inline-flex;
     align-items: center;
-    padding: 0.2em 0.65em;
-    border-radius: 62px;
-    font-size: 0.72em;
-    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
     text-transform: capitalize;
+    letter-spacing: 0.02em;
 
     &--placed {
-        background: #f0f9ff;
-        color: #0369a1;
+        background: variables.$info_bg_color;
+        color: variables.$info_text_color;
     }
 
     &--processing {
-        background: #fefce8;
-        color: #a16207;
+        background: variables.$warning_bg_color;
+        color: variables.$warning_text_color;
     }
 
     &--shipped {
-        background: #f5f3ff;
-        color: #6d28d9;
+        background: variables.$purple_bg_color;
+        color: variables.$purple_text_color;
     }
 
     &--delivered {
-        background: #f0fdf4;
-        color: #15803d;
+        background: variables.$success_bg_color;
+        color: variables.$success_text_dark;
     }
 
     &--cancelled {
-        background: #fef2f2;
-        color: #b91c1c;
+        background: variables.$error_bg_color;
+        color: variables.$error_text_dark;
     }
 }

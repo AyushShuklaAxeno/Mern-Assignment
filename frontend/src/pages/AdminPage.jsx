@@ -136,23 +136,35 @@ export const AdminPage = () => {
 
             <AdminHeader />
 
-            <div className="admin-container">
-                <div className="admin-container__header">
-                    <div>
-                        <h1 className="admin-container__title">Admin Control Center</h1>
-                        <p className="admin-container__subtitle">
-                            Manage your ShopCo catalog, categories, and customer orders
-                        </p>
+            <div className="admin-shell">
+                <aside className="admin-sidebar">
+                    <div className="admin-sidebar__heading">
+                        <span className="admin-sidebar__eyebrow">Workspace</span>
+                        <strong>Store management</strong>
                     </div>
-
                     <AdminTabs
                         activeTab={activeTab}
                         onSelectTab={setActiveTab}
                         counts={counts}
                     />
-                </div>
+                    {/* <div className="admin-sidebar__footer">
+                        <span className="admin-sidebar__status-dot" />
+                        <span>System online</span>
+                    </div> */}
+                </aside>
 
-                <main className="admin-container__content">
+                <div className="admin-container">
+                    <div className="admin-container__header">
+                        <div>
+                            <span className="admin-container__eyebrow">Overview</span>
+                            <h1 className="admin-container__title">Admin Control Center</h1>
+                            <p className="admin-container__subtitle">
+                                Manage your ShopCo catalog, categories, and customer orders
+                            </p>
+                        </div>
+                    </div>
+
+                    <main className="admin-container__content">
                     {activeTab === 'dashboard' && (
                         <AdminDashboardView
                             products={products}
@@ -193,7 +205,8 @@ export const AdminPage = () => {
                             onChangeStatus={handleChangeOrderStatus}
                         />
                     )}
-                </main>
+                    </main>
+                </div>
             </div>
 
             {/* Modals */}

@@ -10,7 +10,7 @@ const DEFAULT_FILTERS = {
     maxPrice: '',
     size: '',
     dressStyle: '',
-    sort: 'popular',
+    sort: 'newest',
 };
 
 export const ProductContextProvider = ({ children }) => {

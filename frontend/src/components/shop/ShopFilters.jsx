@@ -1,10 +1,7 @@
 import { useState } from 'react';
+import { X, SlidersHorizontal, ChevronDown, ChevronRight } from 'lucide-react';
 import { useProducts } from '../../hooks/ProductContext';
 import { useCategories } from '../../hooks/CategoryContext';
-
-import filterIcon from '../../assests/icons/filter_icon.svg';
-import cancelIcon from '../../assests/icons/cancel_icon.svg';
-import chevronRightIcon from '../../assests/icons/chevron_right.svg';
 
 const AVAILABLE_SIZES = [
     'XX-Small',
@@ -13,9 +10,9 @@ const AVAILABLE_SIZES = [
     'Medium',
     'Large',
     'X-Large',
-    '2X-Large',
-    '3X-Large',
-    '4X-Large',
+    'XL-Large',
+    'XLL-Large',
+    'XLLL-Large',
 ];
 
 const DRESS_STYLES = ['Casual', 'Formal', 'Party', 'Gym'];
@@ -109,9 +106,7 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
             <div className="shop-filters__header">
                 <div className="shop-filters__title-group">
                     <h3 className="shop-filters__title">Filters</h3>
-                    {!isMobile && (
-                        <img src={filterIcon} alt="" className="shop-filters__filter-icon" />
-                    )}
+                    <SlidersHorizontal size={18} className="shop-filters__filter-icon" />
                 </div>
                 {isMobile && (
                     <button
@@ -120,7 +115,7 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
                         onClick={onClose}
                         aria-label="Close filters"
                     >
-                        <img src={cancelIcon} alt="Close" />
+                        <X size={20} />
                     </button>
                 )}
             </div>
@@ -138,9 +133,8 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
                                 onClick={() => handleCategorySelect(cat.name)}
                             >
                                 <span className="shop-filters__category-name">{cat.name}</span>
-                                <img
-                                    src={chevronRightIcon}
-                                    alt=""
+                                <ChevronRight
+                                    size={16}
                                     className="shop-filters__chevron"
                                 />
                             </button>
@@ -151,7 +145,6 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
 
             <hr className="shop-filters__divider" />
 
-
             <div className="shop-filters__section">
                 <button
                     type="button"
@@ -159,9 +152,10 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
                     onClick={() => setIsPriceOpen(!isPriceOpen)}
                 >
                     <span className="shop-filters__section-title">Price</span>
-                    <span className={`shop-filters__accordion-arrow ${isPriceOpen ? 'shop-filters__accordion-arrow--open' : ''}`}>
-                        ▾
-                    </span>
+                    <ChevronDown
+                        size={18}
+                        className={`shop-filters__accordion-arrow ${isPriceOpen ? 'shop-filters__accordion-arrow--open' : ''}`}
+                    />
                 </button>
 
                 {isPriceOpen && (
@@ -212,9 +206,10 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
                     onClick={() => setIsSizeOpen(!isSizeOpen)}
                 >
                     <span className="shop-filters__section-title">Size</span>
-                    <span className={`shop-filters__accordion-arrow ${isSizeOpen ? 'shop-filters__accordion-arrow--open' : ''}`}>
-                        ▾
-                    </span>
+                    <ChevronDown
+                        size={18}
+                        className={`shop-filters__accordion-arrow ${isSizeOpen ? 'shop-filters__accordion-arrow--open' : ''}`}
+                    />
                 </button>
 
                 {isSizeOpen && (
@@ -245,9 +240,10 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
                     onClick={() => setIsStyleOpen(!isStyleOpen)}
                 >
                     <span className="shop-filters__section-title">Dress Style</span>
-                    <span className={`shop-filters__accordion-arrow ${isStyleOpen ? 'shop-filters__accordion-arrow--open' : ''}`}>
-                        ▾
-                    </span>
+                    <ChevronDown
+                        size={18}
+                        className={`shop-filters__accordion-arrow ${isStyleOpen ? 'shop-filters__accordion-arrow--open' : ''}`}
+                    />
                 </button>
 
                 {isStyleOpen && (
@@ -262,9 +258,8 @@ export const ShopFilters = ({ onClose, isMobile = false }) => {
                                         onClick={() => handleStyleSelect(style)}
                                     >
                                         <span>{style}</span>
-                                        <img
-                                            src={chevronRightIcon}
-                                            alt=""
+                                        <ChevronRight
+                                            size={16}
                                             className="shop-filters__chevron"
                                         />
                                     </button>

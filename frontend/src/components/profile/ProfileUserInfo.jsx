@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { User, Edit2 } from 'lucide-react';
 import { useAuth } from '../../hooks/AuthContext';
 
 export const ProfileUserInfo = () => {
@@ -57,14 +58,20 @@ export const ProfileUserInfo = () => {
     return (
         <section className="profile-card">
             <div className="profile-card__header">
-                <h2 className="profile-card__title">Personal Info</h2>
+                <div className="profile-card__title-group">
+                    <div className="profile-card__icon-wrap">
+                        <User size={18} />
+                    </div>
+                    <h2 className="profile-card__title">Personal Info</h2>
+                </div>
                 {!isEditing && (
                     <button
                         type="button"
                         className="profile-btn-action"
                         onClick={handleStartEdit}
                     >
-                        Edit
+                        <Edit2 size={13} />
+                        <span>Edit</span>
                     </button>
                 )}
             </div>

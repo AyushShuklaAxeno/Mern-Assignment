@@ -99,6 +99,10 @@ export const AuthContextProvider = ({ children }) => {
         }
     };
 
+    const clearError = () => {
+        setError(null);
+    };
+
     const logoutUser = async () => {
         setUser(null);
         setError(null);
@@ -112,6 +116,8 @@ export const AuthContextProvider = ({ children }) => {
                 loading,
                 initialLoading,
                 error,
+                setError,
+                clearError,
                 registerUser,
                 loginUser,
                 logoutUser,

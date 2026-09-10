@@ -21,8 +21,14 @@ export const AdminDashboardView = ({
 
     return (
         <div className="admin-dashboard">
-            {/* KPI Cards Grid */}
-            <div className="admin-stats-grid">
+            <div className="admin-dashboard__overview-grid">
+                <div className="admin-dashboard__metrics">
+                    <div className="admin-dashboard__section-label">
+                        <span>Store performance</span>
+                        <span className="admin-dashboard__period">All time</span>
+                    </div>
+                    {/* KPI Cards Grid */}
+                    <div className="admin-stats-grid">
                 <div className="admin-stat-card">
                     <div className="admin-stat-card__icon admin-stat-card__icon--green">
                         <IndianRupee size={22} />
@@ -68,10 +74,11 @@ export const AdminDashboardView = ({
                         <span className="admin-stat-card__hint">Available on store navigation</span>
                     </div>
                 </div>
-            </div>
+                    </div>
+                </div>
 
-            {/* Quick Actions Bar */}
-            <div className="admin-quick-actions">
+                {/* Quick Actions */}
+                <div className="admin-quick-actions">
                 <span className="admin-quick-actions__title">Quick Management Actions:</span>
                 <div className="admin-quick-actions__buttons">
                     <button
@@ -98,6 +105,7 @@ export const AdminDashboardView = ({
                         <span>View All Orders</span>
                         <ArrowRight size={16} />
                     </button>
+                </div>
                 </div>
             </div>
 

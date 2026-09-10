@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MapPin, Edit2, Plus } from 'lucide-react';
 import { useAuth } from '../../hooks/AuthContext';
 
 export const ProfileAddress = () => {
@@ -84,14 +85,20 @@ export const ProfileAddress = () => {
     return (
         <section className="profile-card">
             <div className="profile-card__header">
-                <h2 className="profile-card__title">Delivery Address</h2>
+                <div className="profile-card__title-group">
+                    <div className="profile-card__icon-wrap">
+                        <MapPin size={18} />
+                    </div>
+                    <h2 className="profile-card__title">Delivery Address</h2>
+                </div>
                 {!isEditing && hasAddress && (
                     <button
                         type="button"
                         className="profile-btn-action"
                         onClick={handleStartEdit}
                     >
-                        Edit
+                        <Edit2 size={13} />
+                        <span>Edit</span>
                     </button>
                 )}
             </div>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import fallbackImage from '../assests/product_images/black_tshirt.png';
+import StarRating from './StarRating';
 
 export const ProductCard = ({
     id,
@@ -22,6 +23,8 @@ export const ProductCard = ({
             starsHtml += '<span class="product-card__star product-card__star--empty">★</span>';
         }
     }
+
+    void starsHtml;
 
     const numPrice = Number(price) || 0;
     const numDiscountPrice = Number(discountPrice);
@@ -65,7 +68,7 @@ export const ProductCard = ({
                     <div className="product-card__content">
                         <h3 className="product-card__title">{name}</h3>
                         <p className="product-card__rating">
-                            <span dangerouslySetInnerHTML={{ __html: starsHtml }} />
+                            <StarRating rating={numRating} />
                             <span>{numRating}/5</span>
                         </p>
                         <div className="product-card__price-group">

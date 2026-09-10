@@ -30,6 +30,13 @@ const productSchema = new mongoose.Schema({
         default: 0,
     },
 
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5,
+        default: 4.5,
+    },
+
     thumbnailImage: {
         type: String,
         required: true,

@@ -55,6 +55,29 @@ export const ShopPage = () => {
         }
     }, [searchParams, categoryName]);
 
+    // Close mobile filter on viewport resize > 992px
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 992) {
+                setIsMobileFilterOpen(false);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Prevent background scrolling while mobile filter drawer is open
+    useEffect(() => {
+        if (isMobileFilterOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isMobileFilterOpen]);
+
     const paramStyle =
         searchParams.get('dressStyle') ||
         searchParams.get('dressstyle') ||

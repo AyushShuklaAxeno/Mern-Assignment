@@ -1,6 +1,6 @@
 import { LayoutDashboard, Package, Tag, ShoppingBag } from 'lucide-react';
 
-export const AdminTabs = ({ activeTab, onSelectTab, counts }) => {
+export const AdminTabs = ({ activeTab, onSelectTab }) => {
     const tabs = [
         {
             id: 'dashboard',
@@ -11,24 +11,21 @@ export const AdminTabs = ({ activeTab, onSelectTab, counts }) => {
             id: 'products',
             label: 'Products',
             icon: Package,
-            count: counts?.products,
         },
         {
             id: 'categories',
             label: 'Categories',
             icon: Tag,
-            count: counts?.categories,
         },
         {
             id: 'orders',
             label: 'Orders',
             icon: ShoppingBag,
-            count: counts?.orders,
         },
     ];
 
     return (
-        <nav className="admin-tabs" aria-label="Admin Navigation">
+        <nav className="admin-tabs admin-tabs--sidebar" aria-label="Admin Navigation">
             {tabs.map(tab => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -42,9 +39,6 @@ export const AdminTabs = ({ activeTab, onSelectTab, counts }) => {
                     >
                         <Icon size={18} className="admin-tabs__icon" />
                         <span className="admin-tabs__label">{tab.label}</span>
-                        {tab.count !== undefined && (
-                            <span className="admin-tabs__count">{tab.count}</span>
-                        )}
                     </button>
                 );
             })}

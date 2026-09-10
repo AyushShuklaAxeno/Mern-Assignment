@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
+import { SlidersHorizontal } from 'lucide-react';
 import { useProducts } from '../../hooks/ProductContext';
-import filterIcon from '../../assests/icons/filter_icon.svg';
 
 const formatTitle = (text) => {
     if (!text) return '';
@@ -34,8 +34,8 @@ export const ShopHeader = ({ onOpenMobileFilters, title }) => {
         (effectiveStyle
             ? formatTitle(effectiveStyle)
             : effectiveCategory
-            ? formatTitle(effectiveCategory)
-            : 'Casual');
+                ? formatTitle(effectiveCategory)
+                : 'Casual');
 
     const handleSortChange = (e) => {
         setSort(e.target.value);
@@ -59,13 +59,14 @@ export const ShopHeader = ({ onOpenMobileFilters, title }) => {
                     <select
                         id="shopSortSelect"
                         className="shop-header__sort-select"
-                        value={appliedFilters.sort || 'popular'}
+                        value={appliedFilters.sort || 'newest'}
                         onChange={handleSortChange}
                     >
-                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest</option>
                         <option value="price-asc">Price: Low to High</option>
                         <option value="price-desc">Price: High to Low</option>
-                        <option value="newest">Newest</option>
+                        <option value="rating-desc">Rating: High to Low</option>
+                        <option value="rating-asc">Rating: Low to High</option>
                     </select>
                 </div>
 
@@ -75,7 +76,7 @@ export const ShopHeader = ({ onOpenMobileFilters, title }) => {
                     onClick={onOpenMobileFilters}
                     aria-label="Open filters"
                 >
-                    <img src={filterIcon} alt="" />
+                    <SlidersHorizontal size={18} />
                 </button>
             </div>
         </div>

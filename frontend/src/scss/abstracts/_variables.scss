@@ -1,20 +1,125 @@
+// Layout & Container Variables
 $navbar_search_bg: #F0F0F0;
-
 $container_padding_x_mobile: 16px;
 $container_padding_x_tablet: 24px;
 $container_padding_x_desktop: 90px;
 
-
+// Core Brand Colors
 $primary_color: #000000;
 $secondary_color: #FFFFFF;
+$primary_hover_color: #222222;
+$dark_neutral_color: #262626;
+
+// Neutral & Grey Scale
 $light_grey_color: #0000001A;
 $medium_grey_color: #00000099;
 $grey_color_1: #0000004D;
-$grey_color_2: #f2f0f1;
+$grey_color_2: #F2F0F1;
 $product_bg_color: #F0EEED;
 $dress_style_bg_color: #F0F0F0;
 
+$neutral_light_0: #FAFAFA;
+$neutral_light_1: #FBFBFB;
+$neutral_light_2: #F5F5F5;
+$neutral_light_3: #EBEBEB;
+$neutral_light_4: #E5E5E5;
+$neutral_light_5: #E0E0E0;
+$neutral_light_6: #EAEAEA;
+$neutral_light_7: #F2F2F2;
+
+$neutral_mid_1: #999999;
+$neutral_mid_2: #888888;
+$neutral_mid_3: #777777;
+$neutral_mid_4: #555555;
+
+// Status & Alert Colors - Red / Error
 $primary_red_color: #FF3333;
 $secondary_red_color: #FF33331A;
+$error_bg_color: #FEF2F2;
+$error_border_color: #FECACA;
+$error_text_color: #991B1B;
+$error_text_dark: #B91C1C;
+$error_accent_color: #DC2626;
+$error_accent_border: #FEE2E2;
 
-$yellow_1: #f4c542
+// Status & Alert Colors - Green / Success
+$success_color: #10B981;
+$success_text_light: #16A34A;
+$success_text_color: #166534;
+$success_text_dark: #15803D;
+$success_bg_color: #F0FDF4;
+$success_border_color: #BBF7D0;
+
+// Status & Alert Colors - Amber / Orange / Warning
+$warning_color: #F4C542;
+$yellow_1: #F4C542;
+$warning_bg_color: #FEFCE8;
+$warning_text_color: #A16207;
+$warning_orange_text: #C2410C;
+$warning_orange_bg: #FFF7ED;
+$warning_orange_border: #FFEDD5;
+$warning_orange_dot: #EA580C;
+
+// Status & Alert Colors - Blue / Info & Purple
+$info_bg_color: #F0F9FF;
+$info_text_color: #0369A1;
+$purple_bg_color: #F5F3FF;
+$purple_text_color: #6D28D9;
+
+// ==========================================
+// Admin Design System Tokens
+// ==========================================
+$admin_ink: #111827;              // near-black headline ink
+$admin_ink_soft: #4B5563;         // secondary text
+$admin_ink_faint: #9CA3AF;        // muted/hint text
+
+$admin_canvas: #F8F9FA;           // page background
+$admin_surface: #FFFFFF;          // card surface
+$admin_surface_tint: #F3F4F6;     // tinted surface (zebra rows, chips)
+
+$admin_border: #E5E7EB;           // hairline border
+$admin_border_strong: #D1D5DB;    // stronger border / hover
+
+$admin_brand: #000000;            // primary brand — black
+$admin_brand_dark: #222222;       // brand hover/active
+$admin_brand_tint: #F3F4F6;       // brand light fill
+
+$admin_amber: #D97706;
+$admin_amber_dark: #92400E;
+$admin_amber_tint: #FEF3E2;
+$admin_emerald: #047857;
+$admin_emerald_tint: #E4F7EE;
+$admin_rose: #E11D48;
+$admin_rose_dark: #BE123C;
+$admin_rose_tint: #FDE8ED;
+$admin_sky: #0369A1;
+$admin_sky_tint: #E5F4FC;
+$admin_violet: #4B5563;
+$admin_violet_tint: #F3F4F6;
+$admin_gold: #FBBF24;
+
+// Admin RGBA & Translucent Tokens
+$admin_header_item_bg: rgba(255, 255, 255, 0.14);
+$admin_header_avatar_bg: rgba(255, 255, 255, 0.16);
+$admin_header_divider: rgba(255, 255, 255, 0.22);
+$admin_header_text_faint: rgba(255, 255, 255, 0.65);
+$admin_header_text_soft: rgba(255, 255, 255, 0.85);
+$admin_white_alpha_25: rgba(255, 255, 255, 0.25);
+$admin_white_alpha_80: rgba(255, 255, 255, 0.8);
+$admin_transparent_white: rgba(255, 255, 255, 0);
+
+$admin_glass_bg_strong: rgba(255, 255, 255, 0.85);
+$admin_glass_bg_soft: rgba(255, 255, 255, 0.65);
+$admin_sticky_col_bg: rgba(248, 249, 250, 0.96);
+$admin_overlay_bg: rgba(0, 0, 0, 0.55);
+
+$admin_page_glow_brand: rgba(0, 0, 0, 0.02);
+$admin_page_glow_violet: rgba(0, 0, 0, 0.02);
+$admin_amber_border: rgba(217, 119, 6, 0.25);
+$admin_rose_border: rgba(225, 29, 72, 0.3);
+
+$admin_shadow_card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 20px -8px rgba(0, 0, 0, 0.08);
+$admin_shadow_hover: 0 4px 10px rgba(0, 0, 0, 0.06), 0 16px 32px -12px rgba(0, 0, 0, 0.12);
+$admin_shadow_modal: 0 24px 64px -12px rgba(0, 0, 0, 0.35);
+$admin_shadow_header: 0 1px 0 rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+$admin_brand_shadow: 0 2px 8px rgba(0, 0, 0, 0.25);

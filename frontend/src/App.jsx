@@ -16,6 +16,7 @@ import ShopPage from './pages/ShopPage';
 import ProductDescription from './pages/ProductDescription';
 import CartPage from './pages/CartPage';
 import ProfilePage from './pages/ProfilePage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -30,9 +31,23 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/shop" element={<ShopPage />} />
                     <Route path="/category/:categoryName" element={<ShopPage />} />
-                    <Route path="/cart" element={<CartPage />} />
+                    <Route
+                      path="/cart"
+                      element={
+                        <ProtectedRoute>
+                          <CartPage />
+                        </ProtectedRoute>
+                      }
+                    />
                     <Route path="/product/:id" element={<ProductDescription />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route
+                      path="/profile"
+                      element={
+                        <ProtectedRoute>
+                          <ProfilePage />
+                        </ProtectedRoute>
+                      }
+                    />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route

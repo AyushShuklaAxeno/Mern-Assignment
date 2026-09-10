@@ -7,6 +7,12 @@
     width: 295px;
     max-width: 295px;
 
+    @media (max-width: 1280px) {
+        flex: 0 0 260px;
+        width: 260px;
+        max-width: 260px;
+    }
+
     @media (max-width: 992px) {
         flex: 0 0 240px;
         width: 240px;
@@ -23,8 +29,8 @@
 .product-card {
     @include mixins.center($flexDirection: column, $alignItems: start);
     gap: 1em;
-    width: 295px;
-    max-width: 295px;
+    width: 100%;
+    max-width: 100%;
 
     @media (max-width: 992px) {
         width: 240px;
@@ -172,5 +178,32 @@
             font-size: 0.7em;
             padding: 0.2em 0.5em;
         }
+    }
+}
+
+.star-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.08em;
+    color: variables.$grey_color_1;
+    line-height: 1;
+
+    &__star {
+        position: relative;
+        display: inline-block;
+        line-height: 1;
+    }
+
+    &__empty { color: variables.$grey_color_1; }
+
+    &__fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        color: variables.$yellow_1;
+
+        &--full { width: 100%; }
+        &--half { width: 50%; }
     }
 }

@@ -86,13 +86,13 @@ export const ProductDescription = () => {
                             <div className="product-page__tab-content">
                                 <h3>Product Specifications</h3>
                                 <p>
-                                    {product?.description || 'Crafted with premium materials designed for long-lasting wear and comfort.'}
+                                    {product?.description || 'Great Quality.'}
                                 </p>
                                 <ul>
-                                    <li>Material: 100% Breathable Combed Cotton</li>
-                                    <li>Fit: Regular casual relaxed fit</li>
-                                    <li>Care Instructions: Machine wash cold with like colors, tumble dry low</li>
-                                    <li>Origin: Responsibly manufactured</li>
+                                    <li>Feel: Soft-touch fabric designed for all-day comfort</li>
+                                    <li>Style: Clean everyday look with a modern finish</li>
+                                    <li>Durability: Crafted to hold its shape and color over time</li>
+                                    <li>Versatility: Easy to pair with any clothes</li>
                                 </ul>
                             </div>
                         )}

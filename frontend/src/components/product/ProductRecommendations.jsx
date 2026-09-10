@@ -21,7 +21,7 @@ export const ProductRecommendations = ({ currentProductId }) => {
                         key={p._id}
                         id={p._id}
                         imgURL={p.thumbnailImage}
-                        rating={4.5}
+                        rating={p.rating || 4.5}
                         name={p.name}
                         price={p.price}
                         discountPrice={p.discountPrice}

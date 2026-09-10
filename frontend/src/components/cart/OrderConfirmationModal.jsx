@@ -10,17 +10,19 @@ import {
     Building2,
     ArrowRight,
     Edit2,
-    Check
+    Check,
+    ShieldCheck,
+    Lock
 } from 'lucide-react';
 import { useAuth } from '../../hooks/AuthContext';
 import { useCart } from '../../hooks/CartContext';
 import api from '../../lib/api';
 
 const PAYMENT_METHODS = [
-    { id: 'card', label: 'Card', icon: CreditCard },
-    { id: 'cod', label: 'Cash on Delivery', icon: Banknote },
-    { id: 'upi', label: 'UPI', icon: Smartphone },
+    { id: 'card', label: 'Credit / Debit Card', icon: CreditCard },
+    { id: 'upi', label: 'UPI / Google Pay', icon: Smartphone },
     { id: 'netbanking', label: 'Net Banking', icon: Building2 },
+    { id: 'cod', label: 'Cash on Delivery', icon: Banknote },
 ];
 
 export const OrderConfirmationModal = ({
@@ -54,6 +56,17 @@ export const OrderConfirmationModal = ({
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [placedOrder, setPlacedOrder] = useState(null);
+
+    // Lock background scroll when modal is open
+    useEffect(() => {
+        if (isOpen) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }
+    }, [isOpen]);
 
     useEffect(() => {
         if (user?.address) {
@@ -129,10 +142,9 @@ export const OrderConfirmationModal = ({
     return (
         <div className="checkout-modal-backdrop" onClick={onClose}>
             <div
-                className="checkout-modal"
+                className="checkout-modal checkout-modal--wide"
                 onClick={(e) => e.stopPropagation()}
             >
-
                 <button
                     type="button"
                     className="checkout-modal__close-btn"
@@ -145,7 +157,7 @@ export const OrderConfirmationModal = ({
                 {placedOrder ? (
                     <div className="checkout-modal__success">
                         <div className="checkout-modal__success-icon">
-                            <CheckCircle2 size={52} strokeWidth={2} />
+                            <CheckCircle2 size={56} strokeWidth={2} />
                         </div>
 
                         <h2 className="checkout-modal__success-title">Order Confirmed!</h2>
@@ -192,12 +204,15 @@ export const OrderConfirmationModal = ({
                         </div>
                     </div>
                 ) : (
-
                     <form className="checkout-modal__form" onSubmit={handleConfirmOrder}>
                         <div className="checkout-modal__header">
-                            <h2 className="checkout-modal__title">Confirm Order</h2>
+                            {/* <div className="checkout-modal__header-badge">
+                                <Lock size={13} />
+                                <span>SECURE CHECKOUT</span>
+                            </div> */}
+                            <h2 className="checkout-modal__title">Checkout</h2>
                             <p className="checkout-modal__subtitle">
-                                Review delivery address and choose payment
+                                Enter delivery address and payment method
                             </p>
                         </div>
 
@@ -207,169 +222,191 @@ export const OrderConfirmationModal = ({
                             </div>
                         )}
 
-                        <div className="checkout-modal__content">
-
-                            <div className="checkout-modal__section">
-                                <div className="checkout-modal__section-head">
-                                    <div className="checkout-modal__section-title">
-                                        <MapPin size={16} />
-                                        <span>Delivery Address</span>
-                                    </div>
-                                    {!isEditingAddress && (
-                                        <button
-                                            type="button"
-                                            className="checkout-modal__edit-link"
-                                            onClick={() => setIsEditingAddress(true)}
-                                        >
-                                            <Edit2 size={13} />
-                                            Change
-                                        </button>
-                                    )}
-                                </div>
-
-                                {!isEditingAddress ? (
-                                    <div className="checkout-modal__address-preview">
-                                        <p className="checkout-modal__address-recipient">{user?.name}</p>
-                                        <p className="checkout-modal__address-text">
-                                            {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state} - {shippingAddress.zip}
-                                        </p>
-                                        <span className="checkout-modal__address-country">{shippingAddress.country}</span>
-                                    </div>
-                                ) : (
-                                    <div className="checkout-modal__address-form">
-                                        <div className="checkout-modal__field">
-                                            <input
-                                                id="chkStreet"
-                                                name="street"
-                                                type="text"
-                                                placeholder="Street Address, Flat / House No."
-                                                value={shippingAddress.street}
-                                                onChange={handleAddressChange}
-                                                className="checkout-modal__input"
-                                            />
+                        <div className="checkout-modal__grid">
+                            {/* Left Column: Address & Payment */}
+                            <div className="checkout-modal__main-col">
+                                {/* Address Section */}
+                                <div className="checkout-modal__card">
+                                    <div className="checkout-modal__card-head">
+                                        <div className="checkout-modal__card-title">
+                                            <MapPin size={16} />
+                                            <span>1. Delivery Address</span>
                                         </div>
-
-                                        <div className="checkout-modal__input-row">
-                                            <input
-                                                id="chkCity"
-                                                name="city"
-                                                type="text"
-                                                placeholder="City"
-                                                value={shippingAddress.city}
-                                                onChange={handleAddressChange}
-                                                className="checkout-modal__input"
-                                            />
-                                            <input
-                                                id="chkState"
-                                                name="state"
-                                                type="text"
-                                                placeholder="State"
-                                                value={shippingAddress.state}
-                                                onChange={handleAddressChange}
-                                                className="checkout-modal__input"
-                                            />
-                                        </div>
-
-                                        <div className="checkout-modal__input-row">
-                                            <input
-                                                id="chkZip"
-                                                name="zip"
-                                                type="text"
-                                                placeholder="PIN / Zip Code"
-                                                value={shippingAddress.zip}
-                                                onChange={handleAddressChange}
-                                                className="checkout-modal__input"
-                                            />
-                                            <input
-                                                id="chkCountry"
-                                                name="country"
-                                                type="text"
-                                                placeholder="Country"
-                                                value={shippingAddress.country}
-                                                onChange={handleAddressChange}
-                                                className="checkout-modal__input"
-                                            />
-                                        </div>
-
-                                        {hasSavedAddress && (
+                                        {!isEditingAddress && (
                                             <button
                                                 type="button"
-                                                className="checkout-modal__cancel-edit"
-                                                onClick={() => setIsEditingAddress(false)}
+                                                className="checkout-modal__edit-btn"
+                                                onClick={() => setIsEditingAddress(true)}
                                             >
-                                                Cancel
+                                                <Edit2 size={13} />
+                                                Edit
                                             </button>
                                         )}
                                     </div>
-                                )}
-                            </div>
 
-                            <div className="checkout-modal__section">
-                                <div className="checkout-modal__section-head">
-                                    <div className="checkout-modal__section-title">
-                                        <CreditCard size={16} />
-                                        <span>Payment Method</span>
-                                    </div>
+                                    {!isEditingAddress ? (
+                                        <div className="checkout-modal__address-preview">
+                                            <p className="checkout-modal__address-recipient">{user?.name}</p>
+                                            <p className="checkout-modal__address-text">
+                                                {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state} - {shippingAddress.zip}
+                                            </p>
+                                            <span className="checkout-modal__address-country">{shippingAddress.country}</span>
+                                        </div>
+                                    ) : (
+                                        <div className="checkout-modal__address-form">
+                                            <div className="checkout-modal__field">
+                                                <input
+                                                    id="chkStreet"
+                                                    name="street"
+                                                    type="text"
+                                                    placeholder="Street Address, Flat / House No."
+                                                    value={shippingAddress.street}
+                                                    onChange={handleAddressChange}
+                                                    className="checkout-modal__input"
+                                                />
+                                            </div>
+
+                                            <div className="checkout-modal__input-row">
+                                                <input
+                                                    id="chkCity"
+                                                    name="city"
+                                                    type="text"
+                                                    placeholder="City"
+                                                    value={shippingAddress.city}
+                                                    onChange={handleAddressChange}
+                                                    className="checkout-modal__input"
+                                                />
+                                                <input
+                                                    id="chkState"
+                                                    name="state"
+                                                    type="text"
+                                                    placeholder="State"
+                                                    value={shippingAddress.state}
+                                                    onChange={handleAddressChange}
+                                                    className="checkout-modal__input"
+                                                />
+                                            </div>
+
+                                            <div className="checkout-modal__input-row">
+                                                <input
+                                                    id="chkZip"
+                                                    name="zip"
+                                                    type="text"
+                                                    placeholder="PIN / Zip Code"
+                                                    value={shippingAddress.zip}
+                                                    onChange={handleAddressChange}
+                                                    className="checkout-modal__input"
+                                                />
+                                                <input
+                                                    id="chkCountry"
+                                                    name="country"
+                                                    type="text"
+                                                    placeholder="Country"
+                                                    value={shippingAddress.country}
+                                                    onChange={handleAddressChange}
+                                                    className="checkout-modal__input"
+                                                />
+                                            </div>
+
+                                            {hasSavedAddress && (
+                                                <button
+                                                    type="button"
+                                                    className="checkout-modal__cancel-edit"
+                                                    onClick={() => setIsEditingAddress(false)}
+                                                >
+                                                    Cancel Edit
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
 
-                                <div className="checkout-modal__payment-methods">
-                                    {PAYMENT_METHODS.map((pm) => {
-                                        const Icon = pm.icon;
-                                        const isSelected = paymentMethod === pm.id;
-                                        return (
-                                            <button
-                                                key={pm.id}
-                                                type="button"
-                                                className={`checkout-modal__pm-pill ${isSelected ? 'checkout-modal__pm-pill--selected' : ''
+                                {/* Payment Method Section */}
+                                <div className="checkout-modal__card">
+                                    <div className="checkout-modal__card-head">
+                                        <div className="checkout-modal__card-title">
+                                            <CreditCard size={16} />
+                                            <span>2. Payment Method</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="checkout-modal__payment-grid">
+                                        {PAYMENT_METHODS.map((pm) => {
+                                            const Icon = pm.icon;
+                                            const isSelected = paymentMethod === pm.id;
+                                            return (
+                                                <button
+                                                    key={pm.id}
+                                                    type="button"
+                                                    className={`checkout-modal__pm-card ${
+                                                        isSelected ? 'checkout-modal__pm-card--selected' : ''
                                                     }`}
-                                                onClick={() => setPaymentMethod(pm.id)}
-                                            >
-                                                <Icon size={16} />
-                                                <span>{pm.label}</span>
-                                                {isSelected && <Check size={14} className="checkout-modal__pm-check" />}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            <div className="checkout-modal__summary-card">
-                                <div className="checkout-modal__summary-line">
-                                    <span>Items ({itemCount})</span>
-                                    <span>₹{cartSubtotal.toLocaleString()}</span>
-                                </div>
-                                {discountAmount > 0 && (
-                                    <div className="checkout-modal__summary-line checkout-modal__summary-line--discount">
-                                        <span>Discount</span>
-                                        <span>-₹{discountAmount.toLocaleString()}</span>
+                                                    onClick={() => setPaymentMethod(pm.id)}
+                                                >
+                                                    <div className="checkout-modal__pm-icon-wrap">
+                                                        <Icon size={18} />
+                                                    </div>
+                                                    <span className="checkout-modal__pm-name">{pm.label}</span>
+                                                    <div className="checkout-modal__pm-indicator">
+                                                        {isSelected ? <Check size={13} /> : null}
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
                                     </div>
-                                )}
-                                <div className="checkout-modal__summary-line">
-                                    <span>Delivery</span>
-                                    <span>{deliveryFee === 0 ? 'Free' : `₹${deliveryFee}`}</span>
-                                </div>
-                                <div className="checkout-modal__summary-line checkout-modal__summary-line--total">
-                                    <span>Total Amount</span>
-                                    <strong>₹{totalAmount.toLocaleString()}</strong>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="checkout-modal__footer">
-                            <button
-                                type="submit"
-                                className="button button--primary checkout-modal__submit-btn"
-                                disabled={submitting}
-                            >
-                                {submitting ? (
-                                    'Placing Order...'
-                                ) : (
-                                    <>
-                                        <span>Confirm & Place Order</span>
-                                        <ArrowRight size={16} />
-                                    </>
-                                )}
-                            </button>
+                            {/* Right Column: Order Summary & Place Order */}
+                            <div className="checkout-modal__side-col">
+                                <div className="checkout-modal__summary-card">
+                                    <h3 className="checkout-modal__summary-heading">Order Summary</h3>
+
+                                    <div className="checkout-modal__summary-list">
+                                        <div className="checkout-modal__summary-line">
+                                            <span>Subtotal ({itemCount} item{itemCount === 1 ? '' : 's'})</span>
+                                            <span>₹{cartSubtotal.toLocaleString()}</span>
+                                        </div>
+
+                                        {discountAmount > 0 && (
+                                            <div className="checkout-modal__summary-line checkout-modal__summary-line--discount">
+                                                <span>Discount</span>
+                                                <span>-₹{discountAmount.toLocaleString()}</span>
+                                            </div>
+                                        )}
+
+                                        <div className="checkout-modal__summary-line">
+                                            <span>Delivery</span>
+                                            <span className="checkout-modal__free-badge">
+                                                {deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`}
+                                            </span>
+                                        </div>
+
+                                        <hr className="checkout-modal__divider" />
+
+                                        <div className="checkout-modal__summary-line checkout-modal__summary-line--total">
+                                            <span>Total</span>
+                                            <strong>₹{totalAmount.toLocaleString()}</strong>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="button button--primary checkout-modal__submit-btn"
+                                        disabled={submitting}
+                                    >
+                                        {submitting ? (
+                                            'Processing Order...'
+                                        ) : (
+                                            <>
+                                                <span>Place Order</span>
+                                                <ArrowRight size={16} />
+                                            </>
+                                        )}
+                                    </button>
+
+                                </div>
+                            </div>
                         </div>
                     </form>
                 )}

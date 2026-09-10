@@ -1,12 +1,11 @@
 @use '../abstracts/variables' as variables;
 
 .button {
-
-
     padding: 1em 5em;
     border-radius: 4em;
     border: 0;
     font-size: 1em;
+    cursor: pointer;
 
     &--primary {
         color: variables.$secondary_color;
@@ -23,8 +22,8 @@
     }
 
     &:disabled {
-        background-color: #e0e0e0;
-        color: #888888;
+        background-color: variables.$neutral_light_5;
+        color: variables.$neutral_mid_2;
         cursor: not-allowed;
         opacity: 0.7;
     }

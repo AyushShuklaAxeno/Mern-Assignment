@@ -12,13 +12,29 @@ import trashIcon from '../assests/icons/trash_icon.svg';
 
 const CartPage = () => {
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, initialLoading } = useAuth();
     const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, cartSubtotal } = useCart();
 
     const [promoCode, setPromoCode] = useState('');
     const [discountPercent, setDiscountPercent] = useState(0);
     const [promoError, setPromoError] = useState('');
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+
+    if (initialLoading) {
+        return (
+            <div className="cart-page">
+                <Navbar />
+                <div className="cart-page-container cart-loading-state">
+                    <p>Loading cart...</p>
+                </div>
+                <FooterSection />
+            </div>
+        );
+    }
+
+    if (!user) {
+        return <Navigate to="/login?redirect=/cart" replace />;
+    }
 
     const deliveryFee = cartSubtotal > 0 ? (cartSubtotal >= 1000 ? 0 : 50) : 0;
     const discountAmount = Math.round(cartSubtotal * (discountPercent / 100));
@@ -31,14 +47,14 @@ const CartPage = () => {
             return;
         }
 
-        if (trimmed === 'SHOP20' || trimmed === 'DISCOUNT20') {
+        if (trimmed === 'SAVE20' || trimmed === 'DISCOUNT20') {
             setDiscountPercent(20);
             setPromoError('');
-        } else if (trimmed === 'SHOP10') {
+        } else if (trimmed === 'SAVE10') {
             setDiscountPercent(10);
             setPromoError('');
         } else {
-            setPromoError('Invalid promo code. Try "SHOP20"');
+            setPromoError('Invalid promo code. Try "SAVE20"');
         }
     };
 
@@ -148,6 +164,8 @@ const CartPage = () => {
                                                         type="button"
                                                         className="quantity-selector__button quantity-selector__button--increase"
                                                         aria-label="Increase quantity"
+                                                        disabled={item.maxStock !== undefined && item.quantity >= item.maxStock}
+                                                        title={item.maxStock !== undefined && item.quantity >= item.maxStock ? `Maximum stock reached (${item.maxStock})` : 'Increase quantity'}
                                                         onClick={() => increaseQuantity(item.productId, item.size, item.color)}
                                                     >
                                                         +

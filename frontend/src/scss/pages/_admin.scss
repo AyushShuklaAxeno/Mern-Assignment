@@ -2,73 +2,158 @@
 @use '../abstracts/mixins' as mixins;
 
 /* ==========================================================================
-   Admin Page Layout & Container
+   Admin Design Tokens (Sourced from variables)
+   ========================================================================== */
+
+$admin_ink: variables.$admin_ink;
+$admin_ink_soft: variables.$admin_ink_soft;
+$admin_ink_faint: variables.$admin_ink_faint;
+
+$admin_canvas: variables.$admin_canvas;
+$admin_surface: variables.$admin_surface;
+$admin_surface_tint: variables.$admin_surface_tint;
+
+$admin_border: variables.$admin_border;
+$admin_border_strong: variables.$admin_border_strong;
+
+$admin_brand: variables.$admin_brand;
+$admin_brand_dark: variables.$admin_brand_dark;
+$admin_brand_tint: variables.$admin_brand_tint;
+
+$admin_amber: variables.$admin_amber;
+$admin_amber_dark: variables.$admin_amber_dark;
+$admin_amber_tint: variables.$admin_amber_tint;
+$admin_emerald: variables.$admin_emerald;
+$admin_emerald_tint: variables.$admin_emerald_tint;
+$admin_rose: variables.$admin_rose;
+$admin_rose_dark: variables.$admin_rose_dark;
+$admin_rose_tint: variables.$admin_rose_tint;
+$admin_sky: variables.$admin_sky;
+$admin_sky_tint: variables.$admin_sky_tint;
+$admin_violet: variables.$admin_violet;
+$admin_violet_tint: variables.$admin_violet_tint;
+$admin_gold: variables.$admin_gold;
+$admin_white: variables.$secondary_color;
+
+$admin_radius_sm: 6px;
+$admin_radius_md: 10px;
+$admin_radius_lg: 16px;
+$admin_radius_xl: 22px;
+
+$admin_shadow_card: variables.$admin_shadow_card;
+$admin_shadow_hover: variables.$admin_shadow_hover;
+$admin_shadow_modal: variables.$admin_shadow_modal;
+$admin_shadow_header: variables.$admin_shadow_header;
+$admin_brand_shadow: variables.$admin_brand_shadow;
+
+$admin_header_item_bg: variables.$admin_header_item_bg;
+$admin_header_avatar_bg: variables.$admin_header_avatar_bg;
+$admin_header_divider: variables.$admin_header_divider;
+$admin_header_text_faint: variables.$admin_header_text_faint;
+$admin_header_text_soft: variables.$admin_header_text_soft;
+$admin_white_alpha_25: variables.$admin_white_alpha_25;
+$admin_white_alpha_80: variables.$admin_white_alpha_80;
+$admin_transparent_white: variables.$admin_transparent_white;
+
+$admin_glass_bg_strong: variables.$admin_glass_bg_strong;
+$admin_glass_bg_soft: variables.$admin_glass_bg_soft;
+$admin_sticky_col_bg: variables.$admin_sticky_col_bg;
+$admin_overlay_bg: variables.$admin_overlay_bg;
+
+$admin_page_glow_brand: variables.$admin_page_glow_brand;
+$admin_page_glow_violet: variables.$admin_page_glow_violet;
+$admin_amber_border: variables.$admin_amber_border;
+$admin_rose_border: variables.$admin_rose_border;
+
+$admin_ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+$admin_fast: all 0.15s $admin_ease;
+$admin_smooth: all 0.22s $admin_ease;
+
+/* ==========================================================================
+   1. Page shell
    ========================================================================== */
 
 .admin-page {
     min-height: 100vh;
-    background-color: #fafafa;
-    color: variables.$primary_color;
+    background-color: $admin_canvas;
+    background-image:
+        radial-gradient(circle at 100% 0%, $admin_page_glow_brand, transparent 40%),
+        radial-gradient(circle at 0% 100%, $admin_page_glow_violet, transparent 35%);
+    color: $admin_ink;
     display: flex;
     flex-direction: column;
 }
 
+/* ==========================================================================
+   2. Header — solid brand-colored bar, flat, no gradients on the bar itself
+   ========================================================================== */
+
 .admin-header {
-    background-color: variables.$secondary_color;
-    border-bottom: 1px solid variables.$light_grey_color;
-    padding: 1.25rem 2.5rem;
+    background-color: $admin_brand;
+    color: $admin_white;
+    padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 60;
 
     &__brand {
         display: flex;
         align-items: center;
-        gap: 0.85rem;
+        gap: 0.75rem;
+        min-width: 0;
     }
 
     &__logo {
-        font-size: 1.6rem;
-        font-weight: 900;
-        letter-spacing: -0.05em;
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
         text-decoration: none;
-        color: variables.$primary_color;
+        color: $admin_white;
+        white-space: nowrap;
     }
 
     &__badge {
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-        background-color: variables.$primary_color;
-        color: variables.$secondary_color;
-        font-size: 0.68rem;
+        background-color: $admin_header_item_bg;
+        color: $admin_white;
+        font-size: 0.66rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
-        padding: 0.3rem 0.65rem;
-        border-radius: 2rem;
+        letter-spacing: 0.06em;
+        padding: 0.28rem 0.6rem;
+        border-radius: $admin_radius_sm;
+        white-space: nowrap;
+
+        svg { color: $admin_gold; flex-shrink: 0; }
     }
 
     &__actions {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: 1rem;
+        flex-shrink: 0;
     }
 
     &__link {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
+        gap: 0.4rem;
         text-decoration: none;
-        color: variables.$medium_grey_color;
-        font-size: 0.88rem;
+        color: $admin_header_text_soft;
+        font-size: 0.85rem;
         font-weight: 600;
-        transition: color 0.2s ease;
+        padding: 0.5rem 0.85rem;
+        border-radius: $admin_radius_sm;
+        transition: $admin_fast;
+        min-height: 40px;
 
         &:hover {
-            color: variables.$primary_color;
+            color: $admin_white;
+            background-color: $admin_header_item_bg;
         }
     }
 
@@ -77,71 +162,115 @@
         align-items: center;
         gap: 0.65rem;
         padding-left: 1rem;
-        border-left: 1px solid variables.$light_grey_color;
+        border-left: 1px solid $admin_header_divider;
     }
 
     &__avatar {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background-color: variables.$dress_style_bg_color;
+        width: 36px;
+        height: 36px;
+        border-radius: $admin_radius_sm;
+        background-color: $admin_header_avatar_bg;
         @include mixins.center;
-        color: variables.$primary_color;
+        color: $admin_white;
+        flex-shrink: 0;
+        font-weight: 700;
     }
 
     &__user-info {
         display: flex;
         flex-direction: column;
+        line-height: 1.25;
+        min-width: 0;
     }
 
     &__user-name {
-        font-size: 0.88rem;
+        font-size: 0.84rem;
         font-weight: 700;
+        color: $admin_white;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 130px;
     }
 
     &__user-role {
         font-size: 0.72rem;
-        color: variables.$medium_grey_color;
+        color: $admin_header_text_faint;
     }
 
     &__logout {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 0.4rem;
-        background: transparent;
-        border: 1px solid variables.$light_grey_color;
-        border-radius: 2rem;
-        padding: 0.45rem 0.9rem;
+        background: $admin_header_item_bg;
+        border: none;
+        border-radius: $admin_radius_sm;
+        padding: 0.5rem 0.9rem;
         font-size: 0.82rem;
-        font-weight: 600;
-        color: variables.$primary_color;
+        font-weight: 700;
+        color: $admin_white;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: $admin_fast;
+        min-height: 40px;
+        min-width: 40px;
 
         &:hover {
-            background-color: variables.$primary_red_color;
-            color: variables.$secondary_color;
-            border-color: variables.$primary_red_color;
+            background-color: $admin_rose;
         }
+    }
+
+    @media (max-width: 992px) {
+        padding: 0.9rem 1.25rem;
+        &__user-role { display: none; }
     }
 
     @media (max-width: 768px) {
-        padding: 1rem;
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
 
-        &__user-info {
-            display: none;
-        }
-        &__link {
-            display: none;
-        }
+        &__logo { font-size: 1.1rem; }
+        &__badge-text { display: none; }
+        &__actions { gap: 0.4rem; }
+        &__user { padding-left: 0.4rem; border-left: none; }
+        &__user-info { display: none; }
+        &__link { padding: 0.45rem 0.6rem; min-height: 36px; span { display: none; } }
+        &__logout { padding: 0.45rem 0.6rem; min-height: 36px; min-width: 36px; span { display: none; } }
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.65rem 0.75rem;
+        gap: 0.4rem;
+
+        &__logo { font-size: 1rem; }
+        &__badge { display: none; }
+        &__avatar { width: 32px; height: 32px; }
+        &__link { padding: 0.4rem 0.5rem; min-height: 32px; min-width: 32px; }
+        &__logout { padding: 0.4rem 0.5rem; min-height: 32px; min-width: 32px; }
+    }
+
+    @media (max-width: 340px) {
+        padding: 0.5rem 0.5rem;
+        gap: 0.25rem;
+
+        &__logo { font-size: 0.95rem; }
+        &__actions { gap: 0.25rem; }
     }
 }
+
+.admin-header--utility {
+    box-shadow: $admin_shadow_header;
+}
+
+/* ==========================================================================
+   3. Container / page hero
+   ========================================================================== */
 
 .admin-container {
     max-width: 1280px;
     width: 100%;
     margin: 0 auto;
-    padding: 2rem 2.5rem;
+    padding: 2rem 2rem 3rem;
     flex: 1;
 
     &__header {
@@ -152,317 +281,342 @@
     }
 
     &__title {
-        font-size: 2rem;
+        font-size: 1.9rem;
         font-weight: 800;
-        letter-spacing: -0.03em;
-        margin-bottom: 0.25rem;
+        letter-spacing: -0.02em;
+        color: $admin_ink;
+        margin-bottom: 0.3rem;
+
+        &::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            background-color: $admin_amber;
+            margin-right: 0.6rem;
+            transform: translateY(-2px);
+        }
     }
 
     &__subtitle {
-        color: variables.$medium_grey_color;
-        font-size: 0.95rem;
+        color: $admin_ink_soft;
+        font-size: 0.94rem;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
     }
 
     @media (max-width: 768px) {
-        padding: 1rem;
+        padding: 1.25rem 1rem 2.25rem;
+        &__title { font-size: 1.5rem; }
+    }
 
-        &__title {
-            font-size: 1.5rem;
-        }
+    @media (max-width: 480px) {
+        padding: 1rem 0.75rem 2rem;
     }
 }
 
+.admin-dashboard,
+.admin-products-view,
+.admin-orders-view,
+.admin-categories-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
 /* ==========================================================================
-   Admin Tab Switcher
+   4. Tabs — underline style, not a segmented pill control
    ========================================================================== */
 
 .admin-tabs {
     display: flex;
-    gap: 0.5rem;
-    border-bottom: 1px solid variables.$light_grey_color;
-    padding-bottom: 0.25rem;
+    align-items: center;
+    gap: 0.25rem;
+    border-bottom: 2px solid $admin_border;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
 
     &__tab {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
+        padding: 0.85rem 1.1rem;
         border: none;
+        border-bottom: 3px solid transparent;
         background: transparent;
-        font-size: 0.95rem;
+        font-size: 0.88rem;
         font-weight: 600;
-        color: variables.$medium_grey_color;
-        border-radius: 0.5rem;
+        color: $admin_ink_faint;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: $admin_fast;
         white-space: nowrap;
+        min-height: 44px;
+        flex-shrink: 0;
+        margin-bottom: -2px;
 
-        &:hover {
-            color: variables.$primary_color;
-            background-color: variables.$dress_style_bg_color;
-        }
+        &:hover { color: $admin_ink; }
 
         &--active {
-            color: variables.$primary_color;
-            background-color: variables.$secondary_color;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            position: relative;
+            color: $admin_brand;
+            border-bottom-color: $admin_brand;
 
-            &::after {
-                content: '';
-                position: absolute;
-                bottom: -0.3rem;
-                left: 1.25rem;
-                right: 1.25rem;
-                height: 2px;
-                background-color: variables.$primary_color;
-                border-radius: 2px;
+            .admin-tabs__count {
+                background-color: $admin_brand;
+                color: $admin_white;
             }
         }
     }
 
+    &__icon { flex-shrink: 0; }
+
     &__count {
-        background-color: variables.$dress_style_bg_color;
-        color: variables.$primary_color;
-        font-size: 0.75rem;
+        background-color: $admin_surface_tint;
+        color: $admin_ink_soft;
+        font-size: 0.7rem;
         padding: 0.15rem 0.5rem;
-        border-radius: 1rem;
+        border-radius: 999px;
         font-weight: 700;
+        transition: $admin_fast;
+    }
+
+    @media (max-width: 480px) {
+        &__tab { padding: 0.7rem 0.8rem; font-size: 0.82rem; }
     }
 }
 
 /* ==========================================================================
-   KPI Cards Grid (Dashboard)
+   5. KPI stat cards — colored left rail instead of top stripe
    ========================================================================== */
 
 .admin-stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-    margin-bottom: 2rem;
+    gap: 1.1rem;
 
-    @media (max-width: 992px) {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: 560px) {
-        grid-template-columns: 1fr;
-    }
+    @media (max-width: 992px) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 480px) { grid-template-columns: 1fr; gap: 0.85rem; }
 }
 
 .admin-stat-card {
-    background-color: variables.$secondary_color;
-    border: 1px solid variables.$light_grey_color;
-    border-radius: 1rem;
-    padding: 1.4rem;
+    background-color: $admin_surface;
+    border: 1px solid $admin_border;
+    border-left: 4px solid $admin_brand;
+    border-radius: $admin_radius_lg;
+    padding: 1.3rem 1.4rem;
     display: flex;
     align-items: flex-start;
     gap: 1rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    box-shadow: $admin_shadow_card;
+    transition: $admin_smooth;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $admin_shadow_hover;
+    }
 
     &__icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 0.75rem;
+        width: 42px;
+        height: 42px;
+        border-radius: $admin_radius_md;
         @include mixins.center;
         flex-shrink: 0;
 
-        &--green {
-            background-color: #eafaf1;
-            color: #27ae60;
-        }
-        &--blue {
-            background-color: #ebf5fb;
-            color: #2980b9;
-        }
-        &--purple {
-            background-color: #f4ecf7;
-            color: #8e44ad;
-        }
-        &--amber {
-            background-color: #fef9e7;
-            color: #d35400;
-        }
+        &--green { background-color: $admin_emerald_tint; color: $admin_emerald; }
+        &--blue  { background-color: $admin_sky_tint; color: $admin_sky; }
+        &--purple{ background-color: $admin_violet_tint; color: $admin_violet; }
+        &--amber { background-color: $admin_amber_tint; color: $admin_amber; }
     }
 
-    &__info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-    }
+    &__info { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
 
     &__label {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: variables.$medium_grey_color;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: $admin_ink_faint;
         text-transform: uppercase;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.05em;
     }
 
     &__value {
-        font-size: 1.6rem;
+        font-size: 1.7rem;
         font-weight: 800;
-        line-height: 1.1;
+        line-height: 1.15;
+        color: $admin_ink;
     }
 
     &__hint {
-        font-size: 0.75rem;
-        color: variables.$medium_grey_color;
-        margin-top: 0.2rem;
+        font-size: 0.76rem;
+        color: $admin_ink_faint;
+        margin-top: 0.15rem;
+    }
+
+    &:nth-child(2) { border-left-color: $admin_sky; }
+    &:nth-child(3) { border-left-color: $admin_violet; }
+    &:nth-child(4) { border-left-color: $admin_amber; }
+
+    @media (max-width: 768px) {
+        padding: 1.1rem;
+        &__value { font-size: 1.45rem; }
     }
 }
 
 /* ==========================================================================
-   Quick Actions Bar
+   6. Quick actions bar
    ========================================================================== */
 
 .admin-quick-actions {
-    background-color: variables.$secondary_color;
-    border: 1px solid variables.$light_grey_color;
-    border-radius: 1rem;
-    padding: 1.25rem 1.5rem;
+    background-color: $admin_surface;
+    border: 1px solid $admin_border;
+    border-radius: $admin_radius_lg;
+    padding: 1.15rem 1.4rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
     gap: 1rem;
 
     &__title {
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         font-weight: 700;
+        color: $admin_ink;
     }
 
     &__buttons {
         display: flex;
-        gap: 0.75rem;
+        gap: 0.65rem;
         flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+
+        &__buttons { display: grid; grid-template-columns: 1fr; gap: 0.6rem; }
+        .admin-btn { width: 100%; justify-content: center; }
     }
 }
 
 /* ==========================================================================
-   Buttons
+   7. Buttons — square-ish (rounded-md), solid fills, no pill shapes
    ========================================================================== */
 
 .admin-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.65rem 1.25rem;
-    border-radius: 3rem;
-    font-size: 0.88rem;
-    font-weight: 600;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: $admin_radius_md;
+    font-size: 0.86rem;
+    font-weight: 700;
     cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
+    border: 1.5px solid transparent;
+    transition: $admin_fast;
     text-decoration: none;
+    min-height: 42px;
+    white-space: nowrap;
 
     &--primary {
-        background-color: variables.$primary_color;
-        color: variables.$secondary_color;
-
-        &:hover {
-            opacity: 0.88;
-            transform: translateY(-1px);
-        }
+        background-color: $admin_brand;
+        color: $admin_white;
+        &:hover { background-color: $admin_brand_dark; }
     }
 
     &--secondary {
-        background-color: variables.$dress_style_bg_color;
-        color: variables.$primary_color;
-
-        &:hover {
-            background-color: #e5e5e5;
-        }
+        background-color: $admin_surface_tint;
+        color: $admin_brand;
+        &:hover { background-color: $admin_brand_tint; }
     }
 
     &--outline {
         background: transparent;
-        border: 1px solid variables.$light_grey_color;
-        color: variables.$primary_color;
-
-        &:hover {
-            border-color: variables.$primary_color;
-        }
+        border-color: $admin_border_strong;
+        color: $admin_ink;
+        &:hover { border-color: $admin_brand; color: $admin_brand; background-color: $admin_brand_tint; }
     }
 
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
+    &:disabled { opacity: 0.45; cursor: not-allowed; }
 }
 
 .admin-btn-link {
     background: transparent;
     border: none;
-    color: variables.$primary_color;
+    color: $admin_brand;
     font-weight: 700;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
     cursor: pointer;
-    text-decoration: underline;
-
-    &:hover {
-        opacity: 0.75;
-    }
+    padding: 0.3rem 0.5rem;
+    border-radius: $admin_radius_sm;
+    &:hover { background-color: $admin_brand_tint; }
 }
 
 .admin-link-btn {
-    background: transparent;
-    border: none;
-    font-size: 0.85rem;
+    background: $admin_surface;
+    border: 1.5px solid $admin_border_strong;
+    font-size: 0.84rem;
     font-weight: 700;
     cursor: pointer;
-    color: variables.$primary_color;
+    color: $admin_ink;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: $admin_radius_md;
+    transition: $admin_fast;
+    min-height: 40px;
 
-    &:hover {
-        text-decoration: underline;
-    }
+    &:hover { background-color: $admin_brand; color: $admin_white; border-color: $admin_brand; }
 }
 
 .admin-action-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 0.5rem;
-    border: 1px solid variables.$light_grey_color;
-    background: variables.$secondary_color;
+    width: 34px;
+    height: 34px;
+    border-radius: $admin_radius_sm;
+    border: 1.5px solid $admin_border;
+    background: $admin_surface;
     @include mixins.center;
-    color: variables.$primary_color;
+    color: $admin_ink_soft;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: $admin_fast;
+    flex-shrink: 0;
 
-    &:hover {
-        background-color: variables.$dress_style_bg_color;
-    }
+    &:hover { background-color: $admin_brand_tint; color: $admin_brand; border-color: $admin_brand; }
 
-    &--delete:hover {
-        background-color: variables.$secondary_red_color;
-        color: variables.$primary_red_color;
-        border-color: variables.$primary_red_color;
+    &--delete {
+        &:hover { background-color: $admin_rose_tint; color: $admin_rose; border-color: $admin_rose; }
     }
 }
 
 .admin-btn-tiny {
-    padding: 0.25rem 0.6rem;
-    border-radius: 0.35rem;
-    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: $admin_radius_sm;
+    font-size: 0.74rem;
     font-weight: 700;
-    border: 1px solid variables.$light_grey_color;
-    background: variables.$secondary_color;
+    border: 1.5px solid $admin_border;
+    background: $admin_surface;
     cursor: pointer;
+    transition: $admin_fast;
 
     &--danger {
-        background-color: variables.$primary_red_color;
-        color: variables.$secondary_color;
-        border-color: variables.$primary_red_color;
+        background-color: $admin_rose;
+        color: $admin_white;
+        border-color: $admin_rose;
+        &:hover { background-color: $admin_rose_dark; }
     }
 }
 
 /* ==========================================================================
-   Toolbar & Search
+   8. Toolbar, search, filter pills
    ========================================================================== */
 
 .admin-toolbar {
@@ -470,40 +624,42 @@
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
     flex-wrap: wrap;
 
-    &--stacked {
+    &--stacked { flex-direction: column; align-items: stretch; }
+
+    @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
+        .admin-search { max-width: 100%; }
+        .admin-btn { width: 100%; justify-content: center; }
     }
 }
 
 .admin-search {
     position: relative;
     flex: 1;
-    max-width: 480px;
+    max-width: 460px;
 
     &__icon {
         position: absolute;
         left: 1rem;
         top: 50%;
         transform: translateY(-50%);
-        color: variables.$medium_grey_color;
+        color: $admin_ink_faint;
     }
 
     &__input {
         width: 100%;
         padding: 0.75rem 1rem 0.75rem 2.75rem;
-        background-color: variables.$secondary_color;
-        border: 1px solid variables.$light_grey_color;
-        border-radius: 2rem;
+        background-color: $admin_surface;
+        border: 1.5px solid $admin_border;
+        border-radius: $admin_radius_md;
         font-size: 0.88rem;
+        color: $admin_ink;
 
-        &:focus {
-            outline: 2px solid variables.$primary_color;
-            border-color: transparent;
-        }
+        &::placeholder { color: $admin_ink_faint; }
+        &:focus { outline: none; border-color: $admin_brand; box-shadow: 0 0 0 3px $admin_brand_tint; }
     }
 }
 
@@ -511,7 +667,9 @@
     display: flex;
     gap: 0.5rem;
     overflow-x: auto;
-    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
 }
 
 .admin-filter-pill {
@@ -519,32 +677,43 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    border: 1px solid variables.$light_grey_color;
-    background: variables.$secondary_color;
+    border-radius: 999px;
+    border: 1.5px solid $admin_border;
+    background: $admin_surface;
     font-size: 0.82rem;
     font-weight: 600;
-    color: variables.$medium_grey_color;
+    color: $admin_ink_soft;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.2s ease;
+    transition: $admin_fast;
+    flex-shrink: 0;
+
+    &:hover {
+        border-color: $admin_border_strong;
+        color: $admin_ink_soft;
+        background-color: $admin_surface;
+    }
 
     &__count {
-        background-color: variables.$dress_style_bg_color;
+        background-color: $admin_surface_tint;
         padding: 0.1rem 0.45rem;
-        border-radius: 1rem;
-        font-size: 0.72rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 700;
     }
 
     &--active {
-        background-color: variables.$primary_color;
-        color: variables.$secondary_color;
-        border-color: variables.$primary_color;
+        background-color: $admin_brand;
+        color: $admin_white;
+        border-color: $admin_brand;
 
-        .admin-filter-pill__count {
-            background-color: rgba(255, 255, 255, 0.25);
-            color: variables.$secondary_color;
+        &:hover {
+            background-color: $admin_brand;
+            color: $admin_white;
+            border-color: $admin_brand;
         }
+
+        .admin-filter-pill__count { background-color: $admin_white_alpha_25; color: $admin_white; }
     }
 }
 
@@ -552,296 +721,255 @@
     display: flex;
     align-items: center;
     gap: 0.65rem;
-    padding: 0.85rem 1.25rem;
-    background-color: #fff8e1;
-    border: 1px solid #ffe082;
-    border-radius: 0.75rem;
-    margin-bottom: 1.5rem;
+    padding: 0.85rem 1.15rem;
+    background-color: $admin_amber_tint;
+    border: 1px solid $admin_amber_border;
+    border-radius: $admin_radius_md;
     font-size: 0.85rem;
-    color: #8d6e63;
+    color: $admin_amber_dark;
 
-    &__icon {
-        flex-shrink: 0;
-        color: #ff8f00;
-    }
+    &__icon { flex-shrink: 0; color: $admin_amber; }
 }
 
 /* ==========================================================================
-   Table & Cell Components
+   9. Section cards & table
    ========================================================================== */
 
 .admin-section-card {
-    background-color: variables.$secondary_color;
-    border: 1px solid variables.$light_grey_color;
-    border-radius: 1rem;
+    background-color: $admin_surface;
+    border: 1px solid $admin_border;
+    border-radius: $admin_radius_lg;
     padding: 1.5rem;
+    box-shadow: $admin_shadow_card;
 
     &__header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
         margin-bottom: 1.25rem;
     }
 
-    &__title {
-        font-size: 1.25rem;
-        font-weight: 800;
-    }
+    &__title { font-size: 1.2rem; font-weight: 800; color: $admin_ink; }
+    &__subtitle { font-size: 0.82rem; color: $admin_ink_faint; margin-top: 0.15rem; }
 
-    &__subtitle {
-        font-size: 0.82rem;
-        color: variables.$medium_grey_color;
-    }
+    @media (max-width: 768px) { padding: 1.15rem; }
 }
 
 .admin-table-wrapper {
-    background-color: variables.$secondary_color;
-    border: 1px solid variables.$light_grey_color;
-    border-radius: 1rem;
+    background-color: $admin_surface;
+    border: 1px solid $admin_border;
+    border-radius: $admin_radius_lg;
     overflow-x: auto;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+    -webkit-overflow-scrolling: touch;
+    box-shadow: $admin_shadow_card;
+    position: relative;
+
+    /* mobile scroll affordance — fading edge */
+    @media (max-width: 768px) {
+        background-image:
+            linear-gradient(to right, $admin_surface, $admin_transparent_white),
+            linear-gradient(to left, $admin_surface, $admin_transparent_white);
+        background-position: left center, right center;
+        background-repeat: no-repeat;
+        background-size: 24px 100%, 24px 100%;
+        background-attachment: local, local;
+    }
+
+    &::-webkit-scrollbar { height: 8px; }
+    &::-webkit-scrollbar-track { background: $admin_surface_tint; }
+    &::-webkit-scrollbar-thumb { background: $admin_border_strong; border-radius: 999px; }
 }
 
 .admin-table {
     width: 100%;
+    min-width: 680px;
     border-collapse: collapse;
     text-align: left;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
 
     th {
-        background-color: #fbfbfb;
-        padding: 0.95rem 1.25rem;
+        background-color: $admin_ink;
+        color: $admin_white;
+        padding: 0.95rem 1.2rem;
         font-weight: 700;
-        font-size: 0.78rem;
-        color: variables.$medium_grey_color;
+        font-size: 0.72rem;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
-        border-bottom: 1px solid variables.$light_grey_color;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
     }
+
+    th:first-child { border-top-left-radius: $admin_radius_lg; }
+    th:last-child { border-top-right-radius: $admin_radius_lg; }
 
     td {
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid variables.$light_grey_color;
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid $admin_border;
         vertical-align: middle;
+        color: $admin_ink;
     }
 
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    tr:hover td {
-        background-color: #fafafa;
-    }
+    tr:nth-child(even) td { background-color: $admin_surface_tint; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: $admin_brand_tint; }
 
     &__id {
         font-family: monospace;
         font-weight: 700;
-        letter-spacing: 0.05em;
+        font-size: 0.8rem;
+        color: $admin_brand;
     }
 
     &__actions-heading { text-align: right; }
+
     &__original-price {
-        color: #999;
-        font-size: 0.78em;
+        color: $admin_ink_faint;
+        font-size: 0.75rem;
         text-decoration: line-through;
     }
 
-    &__price {
-        font-weight: 700;
-        font-size: 0.95rem;
-    }
+    &__price { font-weight: 800; font-size: 0.94rem; color: $admin_ink; }
+    &__item-count { color: $admin_ink_faint; font-size: 0.82rem; }
 
-    &__item-count {
-        color: variables.$medium_grey_color;
+    @media (max-width: 768px) {
         font-size: 0.82rem;
+        th, td { padding: 0.85rem 1rem; }
     }
 }
+
+/* ==========================================================================
+   10. Product & category cells
+   ========================================================================== */
 
 .admin-product-cell {
     display: flex;
     align-items: center;
     gap: 0.85rem;
+    min-width: 220px;
 
     &__img {
-        width: 48px;
-        height: 48px;
+        width: 46px;
+        height: 46px;
         object-fit: cover;
-        border-radius: 0.5rem;
-        background-color: variables.$dress_style_bg_color;
-        border: 1px solid variables.$light_grey_color;
+        border-radius: $admin_radius_sm;
+        background-color: $admin_surface_tint;
+        border: 1px solid $admin_border;
         flex-shrink: 0;
     }
 
-    &__info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.15rem;
-    }
-
-    &__title {
-        font-size: 0.9rem;
-        font-weight: 700;
-    }
-
-    &__desc {
-        font-size: 0.78rem;
-        color: variables.$medium_grey_color;
-    }
+    &__info { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+    &__title { font-size: 0.88rem; font-weight: 700; color: $admin_ink; }
+    &__desc { font-size: 0.76rem; color: $admin_ink_faint; }
 }
 
-.admin-tag-list {
+.admin-tag-list, .admin-variant-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.35rem;
 }
 
 .admin-tag {
-    background-color: variables.$dress_style_bg_color;
-    padding: 0.2rem 0.55rem;
-    border-radius: 1rem;
+    background-color: $admin_violet_tint;
+    color: $admin_violet;
+    padding: 0.2rem 0.6rem;
+    border-radius: $admin_radius_sm;
     font-size: 0.72rem;
-    font-weight: 600;
-    color: variables.$primary_color;
-}
-
-.admin-variant-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
+    font-weight: 700;
 }
 
 .admin-variant-pill {
-    background-color: #f5f5f5;
-    border: 1px solid variables.$light_grey_color;
-    padding: 0.15rem 0.45rem;
-    border-radius: 0.35rem;
+    background-color: $admin_surface_tint;
+    border: 1px solid $admin_border;
+    padding: 0.15rem 0.5rem;
+    border-radius: $admin_radius_sm;
     font-size: 0.72rem;
+    color: $admin_ink_soft;
 
-    &--out {
-        background-color: variables.$secondary_red_color;
-        color: variables.$primary_red_color;
-        border-color: variables.$secondary_red_color;
-    }
+    &--out { background-color: $admin_rose_tint; color: $admin_rose; border-color: $admin_rose_border; }
 }
 
-.admin-actions-cell {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.4rem;
-}
+.admin-actions-cell { display: flex; justify-content: flex-end; gap: 0.4rem; }
 
 .admin-confirm-box {
     display: flex;
     align-items: center;
     gap: 0.35rem;
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 700;
+    color: $admin_rose;
+    background-color: $admin_rose_tint;
+    padding: 0.3rem 0.6rem;
+    border-radius: $admin_radius_sm;
 }
 
-.admin-category-name-cell {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
+.admin-category-name-cell { display: flex; align-items: center; gap: 0.75rem; min-width: 170px; }
 
 .admin-category-icon-box {
-    width: 32px;
-    height: 32px;
-    border-radius: 0.5rem;
-    background-color: variables.$dress_style_bg_color;
+    width: 34px;
+    height: 34px;
+    border-radius: $admin_radius_sm;
+    background-color: $admin_brand_tint;
     @include mixins.center;
-    color: variables.$primary_color;
+    color: $admin_brand;
+    flex-shrink: 0;
 }
 
-.admin-category-title {
-    font-weight: 700;
-    font-size: 0.95rem;
-    text-transform: capitalize;
-}
-
-.admin-category-desc {
-    color: variables.$medium_grey_color;
-    font-size: 0.85rem;
-}
+.admin-category-title { font-weight: 700; font-size: 0.92rem; text-transform: capitalize; color: $admin_ink; }
+.admin-category-desc { color: $admin_ink_faint; font-size: 0.83rem; max-width: 340px; }
 
 /* ==========================================================================
-   Order Table Cells & Status Changer
+   11. Order cells & status changer
    ========================================================================== */
 
-.admin-order-id-cell {
-    display: flex;
-    flex-direction: column;
-}
-
-.admin-order-id {
-    font-family: monospace;
-    font-weight: 700;
-    font-size: 0.88rem;
-}
-
-.admin-order-date {
-    font-size: 0.75rem;
-    color: variables.$medium_grey_color;
-}
+.admin-order-id-cell { display: flex; flex-direction: column; gap: 0.2rem; min-width: 110px; }
+.admin-order-id { font-family: monospace; font-weight: 700; font-size: 0.85rem; color: $admin_ink; }
+.admin-order-date { font-size: 0.75rem; color: $admin_ink_faint; }
 
 .admin-order-items-snippet {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    min-width: 170px;
 
-    &__more {
-        font-size: 0.72rem;
-        color: variables.$medium_grey_color;
-        font-style: italic;
-    }
+    &__more { font-size: 0.72rem; color: $admin_ink_faint; font-style: italic; }
 }
 
 .admin-order-item-line {
     font-size: 0.82rem;
-
-    &__name {
-        font-weight: 600;
-    }
-
-    &__meta {
-        color: variables.$medium_grey_color;
-        margin-left: 0.25rem;
-    }
+    &__name { font-weight: 700; color: $admin_ink; }
+    &__meta { color: $admin_ink_faint; margin-left: 0.25rem; font-size: 0.76rem; }
 }
 
 .admin-address-cell {
     display: flex;
     flex-direction: column;
     font-size: 0.82rem;
+    gap: 0.15rem;
+    min-width: 130px;
+    color: $admin_ink;
 
-    &__zip {
-        color: variables.$medium_grey_color;
-        font-size: 0.75rem;
-    }
+    &__zip { color: $admin_ink_faint; font-size: 0.74rem; }
 }
 
-.admin-status-changer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+.admin-status-changer { display: flex; align-items: center; gap: 0.5rem; }
 
 .admin-status-select {
-    padding: 0.35rem 0.6rem;
-    border-radius: 0.5rem;
-    border: 1px solid variables.$light_grey_color;
-    background-color: variables.$secondary_color;
+    padding: 0.4rem 0.7rem;
+    border-radius: $admin_radius_sm;
+    border: 1.5px solid $admin_border;
+    background-color: $admin_surface;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
+    color: $admin_ink;
     cursor: pointer;
+    transition: $admin_fast;
 
-    &:focus {
-        outline: 2px solid variables.$primary_color;
-    }
+    &:focus { outline: none; border-color: $admin_brand; box-shadow: 0 0 0 3px $admin_brand_tint; }
 }
 
 /* ==========================================================================
-   Status Badges (ShopCo Pill Design)
+   12. Badges — solid fills, small icon slot
    ========================================================================== */
 
 .admin-badge {
@@ -849,64 +977,36 @@
     align-items: center;
     gap: 0.35rem;
     padding: 0.3rem 0.7rem;
-    border-radius: 2rem;
-    font-size: 0.75rem;
+    border-radius: $admin_radius_sm;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: capitalize;
+    white-space: nowrap;
 
-    &--placed {
-        background-color: #ebf5fb;
-        color: #2980b9;
-    }
-    &--processing {
-        background-color: #fef9e7;
-        color: #b7950b;
-    }
-    &--shipped {
-        background-color: #f4ecf7;
-        color: #8e44ad;
-    }
-    &--delivered {
-        background-color: #eafaf1;
-        color: #27ae60;
-    }
-    &--cancelled {
-        background-color: variables.$secondary_red_color;
-        color: variables.$primary_red_color;
-    }
+    &__icon { flex-shrink: 0; }
 
-    &--active {
-        background-color: #eafaf1;
-        color: #27ae60;
-    }
-    &--inactive {
-        background-color: #f2f2f2;
-        color: #7f8c8d;
-    }
+    &--placed      { background-color: $admin_sky_tint; color: $admin_sky; }
+    &--processing  { background-color: $admin_amber_tint; color: $admin_amber; }
+    &--shipped     { background-color: $admin_violet_tint; color: $admin_violet; }
+    &--delivered   { background-color: $admin_emerald_tint; color: $admin_emerald; }
+    &--cancelled   { background-color: $admin_rose_tint; color: $admin_rose; }
 
-    &--payment {
-        background-color: variables.$dress_style_bg_color;
-        color: variables.$primary_color;
-        font-size: 0.7rem;
-        font-weight: 700;
-    }
+    &--active      { background-color: $admin_emerald_tint; color: $admin_emerald; }
+    &--inactive    { background-color: $admin_surface_tint; color: $admin_ink_faint; }
 
-    &--count {
-        background-color: variables.$dress_style_bg_color;
-        color: variables.$medium_grey_color;
-        font-size: 0.72rem;
-    }
+    &--payment     { background-color: $admin_surface_tint; color: $admin_ink_soft; }
+    &--count       { background-color: $admin_surface_tint; color: $admin_ink_soft; }
+    &--default     { background-color: $admin_surface_tint; color: $admin_ink_soft; }
 }
 
 /* ==========================================================================
-   Modals & Backdrop
+   13. Modals — near-fullscreen sheet on small screens
    ========================================================================== */
 
 .admin-modal-backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
+    background-color: $admin_overlay_bg;
     z-index: 100;
     @include mixins.center;
     padding: 1.5rem;
@@ -914,68 +1014,75 @@
 }
 
 .admin-modal {
-    background-color: variables.$secondary_color;
-    border-radius: 1.25rem;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+    background-color: $admin_surface;
+    border-radius: $admin_radius_lg;
+    box-shadow: $admin_shadow_modal;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
 
-    &--sm {
-        max-width: 460px;
-    }
-    &--md {
-        max-width: 600px;
-    }
-    &--lg {
-        max-width: 760px;
-    }
+    &--sm { max-width: 460px; }
+    &--md { max-width: 620px; }
+    &--lg { max-width: 780px; }
 
     &__header {
-        padding: 1.5rem 1.75rem 1rem;
+        padding: 1.4rem 1.75rem 1.1rem;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        border-bottom: 1px solid variables.$light_grey_color;
+        border-bottom: 1px solid $admin_border;
+        position: sticky;
+        top: 0;
+        background-color: $admin_surface;
+        z-index: 10;
 
-        h3 {
-            font-size: 1.35rem;
-            font-weight: 800;
-        }
+        h3 { font-size: 1.3rem; font-weight: 800; color: $admin_ink; }
     }
 
-    &__subtext {
-        color: variables.$medium_grey_color;
-        font-size: 0.82rem;
-        margin-top: 0.15rem;
-    }
+    &__subtext { color: $admin_ink_faint; font-size: 0.82rem; margin-top: 0.2rem; }
 
     &__close {
-        background: transparent;
+        background: $admin_surface_tint;
         border: none;
         cursor: pointer;
-        color: variables.$medium_grey_color;
-        padding: 0.25rem;
-        border-radius: 0.25rem;
+        color: $admin_ink_soft;
+        padding: 0.4rem;
+        border-radius: $admin_radius_sm;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        min-width: 34px;
+        transition: $admin_fast;
 
-        &:hover {
-            color: variables.$primary_color;
-        }
+        &:hover { background-color: $admin_rose_tint; color: $admin_rose; }
     }
 
     &__footer {
-        padding: 1.25rem 1.75rem;
+        padding: 1.2rem 1.75rem;
         display: flex;
         justify-content: flex-end;
         gap: 0.75rem;
-        border-top: 1px solid variables.$light_grey_color;
+        border-top: 1px solid $admin_border;
+        position: sticky;
+        bottom: 0;
+        background-color: $admin_surface;
+    }
+
+    @media (max-width: 560px) {
+        max-height: 95vh;
+        border-radius: $admin_radius_lg $admin_radius_lg 0 0;
+        margin-top: auto;
+
+        &__header { padding: 1.15rem 1.25rem; h3 { font-size: 1.15rem; } }
+        &__footer { padding: 1rem 1.25rem; .admin-btn { flex: 1; } }
     }
 }
 
 /* ==========================================================================
-   Forms inside Modals
+   14. Forms
    ========================================================================== */
 
 .admin-form {
@@ -985,110 +1092,79 @@
     gap: 1.25rem;
 
     &__alert {
-        padding: 0.75rem 1rem;
-        background-color: variables.$secondary_red_color;
-        color: variables.$primary_red_color;
-        border-radius: 0.5rem;
+        padding: 0.85rem 1.05rem;
+        background-color: $admin_rose_tint;
+        color: $admin_rose;
+        border-radius: $admin_radius_md;
         font-size: 0.85rem;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     &__row {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
         gap: 1rem;
-
-        @media (max-width: 560px) {
-            grid-template-columns: 1fr;
-        }
+        @media (max-width: 560px) { grid-template-columns: 1fr; }
     }
 
-    &__field {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
+    &__field { display: flex; flex-direction: column; gap: 0.4rem; }
 
     &__label {
-        font-size: 0.82rem;
-        font-weight: 700;
+        font-size: 0.76rem;
+        font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.02em;
-        color: variables.$primary_color;
+        letter-spacing: 0.04em;
+        color: $admin_ink_soft;
     }
 
-    &__label-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    &__label-row { display: flex; justify-content: space-between; align-items: center; }
 
-    &__input,
-    &__textarea,
-    &__select {
+    &__input, &__textarea, &__select {
         width: 100%;
         padding: 0.75rem 1rem;
-        border: 1px solid variables.$grey_color_1;
-        border-radius: 0.65rem;
+        border: 1.5px solid $admin_border;
+        border-radius: $admin_radius_md;
         font-size: 0.9rem;
-        font-family: inherit;
+        color: $admin_ink;
+        background-color: $admin_surface;
+        transition: $admin_fast;
 
-        &:focus {
-            outline: 2px solid variables.$primary_color;
-            border-color: transparent;
-        }
-
-        &--sm {
-            padding: 0.5rem 0.75rem;
-        }
+        &:focus { outline: none; border-color: $admin_brand; box-shadow: 0 0 0 3px $admin_brand_tint; }
+        &--sm { padding: 0.5rem 0.75rem; font-size: 0.84rem; }
     }
 
-    &__hint {
-        font-size: 0.8rem;
-        color: variables.$medium_grey_color;
-        font-style: italic;
-    }
+    &__textarea { resize: vertical; min-height: 80px; }
+    &__hint { font-size: 0.8rem; color: $admin_ink_faint; font-style: italic; }
+
+    @media (max-width: 560px) { padding: 1.15rem 1.25rem; }
 }
 
-/* Category Checkbox Pills */
-.admin-checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
+.admin-checkbox-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
 .admin-category-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.45rem 0.9rem;
-    border-radius: 2rem;
-    border: 1px solid variables.$grey_color_1;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    border: 1.5px solid $admin_border;
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
     text-transform: capitalize;
-    transition: all 0.2s ease;
+    transition: $admin_fast;
 
-    input[type='checkbox'] {
-        cursor: pointer;
-    }
+    input[type='checkbox'] { cursor: pointer; accent-color: $admin_brand; }
 
-    &--selected {
-        background-color: variables.$primary_color;
-        color: variables.$secondary_color;
-        border-color: variables.$primary_color;
-    }
+    &--selected { background-color: $admin_brand; color: $admin_white; border-color: $admin_brand; }
 }
 
-/* Variant Builder in Modal */
 .admin-variant-builder {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    max-height: 180px;
+    gap: 0.55rem;
+    max-height: 190px;
     overflow-y: auto;
-    padding: 0.25rem 0;
 }
 
 .admin-variant-row {
@@ -1098,13 +1174,15 @@
     align-items: center;
 }
 
-/* File Upload Boxes */
 .admin-file-box {
-    border: 2px dashed variables.$light_grey_color;
-    border-radius: 0.75rem;
+    border: 2px dashed $admin_border_strong;
+    border-radius: $admin_radius_md;
     padding: 1rem;
     text-align: center;
-    background-color: #fafafa;
+    background-color: $admin_surface_tint;
+    transition: $admin_fast;
+
+    &:hover { border-color: $admin_brand; }
 }
 
 .admin-file-input { display: none; }
@@ -1113,26 +1191,18 @@
     @include mixins.center(column);
     gap: 0.5rem;
     cursor: pointer;
-    color: variables.$medium_grey_color;
+    color: $admin_ink_faint;
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 700;
     padding: 1rem;
 
-    &:hover {
-        color: variables.$primary_color;
-    }
+    &:hover { color: $admin_brand; }
 }
 
 .admin-file-preview {
     position: relative;
     display: inline-block;
-
-    img {
-        width: 90px;
-        height: 90px;
-        object-fit: cover;
-        border-radius: 0.5rem;
-    }
+    img { width: 88px; height: 88px; object-fit: cover; border-radius: $admin_radius_sm; }
 }
 
 .admin-gallery-previews {
@@ -1141,13 +1211,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-
-    img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 0.4rem;
-    }
+    img { width: 58px; height: 58px; object-fit: cover; border-radius: $admin_radius_sm; }
 }
 
 .admin-file-replace-btn {
@@ -1155,114 +1219,90 @@
     margin-top: 0.4rem;
     font-size: 0.75rem;
     font-weight: 700;
+    color: $admin_brand;
     text-decoration: underline;
     cursor: pointer;
 }
 
-/* Order Details Modal Elements */
+/* ==========================================================================
+   15. Order detail modal elements
+   ========================================================================== */
+
 .admin-order-detail-content {
     padding: 1.5rem 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.2rem;
+
+    @media (max-width: 560px) { padding: 1.15rem 1.25rem; }
 }
 
 .admin-order-detail-card {
-    background-color: #fafafa;
-    border: 1px solid variables.$light_grey_color;
-    border-radius: 0.75rem;
+    background-color: $admin_surface_tint;
+    border: 1px solid $admin_border;
+    border-radius: $admin_radius_md;
     padding: 1rem 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
 
-    h4 {
-        font-size: 0.88rem;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
+    h4 { font-size: 0.88rem; font-weight: 800; display: flex; align-items: center; gap: 0.4rem; color: $admin_ink; }
 
-    &__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    &__header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
 }
 
 .admin-order-detail-status-row {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-top: 0.4rem;
-
-    label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        white-space: nowrap;
-    }
+    flex-wrap: wrap;
+    label { font-size: 0.85rem; font-weight: 700; color: $admin_ink_soft; white-space: nowrap; }
 }
 
-.admin-order-address-text {
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: variables.$medium_grey_color;
-}
+.admin-order-address-text { font-size: 0.86rem; line-height: 1.55; color: $admin_ink; }
 
-.admin-order-items-table {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
+.admin-order-items-table { display: flex; flex-direction: column; gap: 0.5rem; }
 
 .admin-order-item-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.4rem 0;
-    border-bottom: 1px dashed variables.$light_grey_color;
-    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed $admin_border;
+    font-size: 0.86rem;
 
-    &:last-child {
-        border-bottom: none;
-    }
+    &:last-child { border-bottom: none; }
 
     &__info {
         display: flex;
         flex-direction: column;
-
-        span {
-            font-size: 0.78rem;
-            color: variables.$medium_grey_color;
-        }
+        strong { font-size: 0.88rem; color: $admin_ink; }
+        span { font-size: 0.76rem; color: $admin_ink_faint; }
     }
 
-    &__price {
-        font-weight: 700;
-    }
+    &__price { font-weight: 800; color: $admin_ink; }
 }
 
 .admin-order-summary-row {
     display: flex;
     justify-content: space-between;
     font-size: 0.9rem;
+    color: $admin_ink_soft;
 
-    strong {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-    }
+    strong { display: flex; align-items: center; gap: 0.35rem; color: $admin_ink; }
 
     &--total {
-        font-size: 1.15rem;
-        padding-top: 0.5rem;
-        border-top: 1px solid variables.$light_grey_color;
+        font-size: 1.1rem;
+        padding-top: 0.6rem;
+        border-top: 1.5px solid $admin_border;
+        color: $admin_ink;
+
+        strong { font-size: 1.25rem; color: $admin_brand; }
     }
 }
 
 /* ==========================================================================
-   Toast Notification Banner
+   16. Toast
    ========================================================================== */
 
 .admin-toast {
@@ -1274,137 +1314,93 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.9rem 1.25rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    animation: toastSlide 0.3s ease-out;
+    border-radius: $admin_radius_md;
+    box-shadow: $admin_shadow_modal;
+    animation: adminToastIn 0.25s $admin_ease;
     max-width: 420px;
 
-    &--success {
-        background-color: variables.$primary_color;
-        color: variables.$secondary_color;
-    }
+    &--success { background-color: $admin_ink; color: $admin_white; }
+    &--error { background-color: $admin_rose; color: $admin_white; }
 
-    &--error {
-        background-color: variables.$primary_red_color;
-        color: variables.$secondary_color;
-    }
-
-    &__icon {
-        flex-shrink: 0;
-    }
-
-    &__message {
-        font-size: 0.88rem;
-        font-weight: 600;
-        flex: 1;
-    }
+    &__icon { flex-shrink: 0; }
+    &__message { font-size: 0.88rem; font-weight: 600; flex: 1; }
 
     &__close {
         background: transparent;
         border: none;
-        color: rgba(255, 255, 255, 0.8);
+        color: $admin_white_alpha_80;
         cursor: pointer;
         padding: 0.2rem;
+        &:hover { color: $admin_white; }
+    }
 
-        &:hover {
-            color: #fff;
-        }
+    @media (max-width: 480px) {
+        top: 1rem; left: 1rem; right: 1rem; max-width: none;
     }
 }
 
-@keyframes toastSlide {
-    from {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+@keyframes adminToastIn {
+    from { transform: translateY(-16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 /* ==========================================================================
-   Empty States & Fullscreen Guards
+   17. Empty states, loaders, unauthorized
    ========================================================================== */
 
 .admin-empty-state {
     @include mixins.center(column);
-    padding: 4rem 2rem;
+    padding: 4rem 1.5rem;
     text-align: center;
     gap: 0.75rem;
 
-    &__icon {
-        color: variables.$grey_color_1;
-    }
-
-    h3 {
-        font-size: 1.25rem;
-        font-weight: 800;
-    }
-
-    p {
-        color: variables.$medium_grey_color;
-        font-size: 0.9rem;
-        max-width: 400px;
-    }
+    &__icon { color: $admin_border_strong; }
+    h3 { font-size: 1.2rem; font-weight: 800; color: $admin_ink; }
+    p { color: $admin_ink_faint; font-size: 0.9rem; max-width: 420px; }
 }
 
 .admin-loading-screen {
     min-height: 100vh;
     @include mixins.center(column);
     gap: 1rem;
-    color: variables.$medium_grey_color;
-    font-weight: 600;
+    color: $admin_ink_soft;
+    font-weight: 700;
 }
 
 .admin-spinner {
-    width: 38px;
-    height: 38px;
-    border: 3px solid variables.$light_grey_color;
-    border-top-color: variables.$primary_color;
+    width: 36px;
+    height: 36px;
+    border: 3.5px solid $admin_border;
+    border-top-color: $admin_brand;
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+    animation: adminSpin 0.7s linear infinite;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
+@keyframes adminSpin { to { transform: rotate(360deg); } }
 
 .admin-unauthorized {
     min-height: 100vh;
     @include mixins.center;
-    padding: 2rem;
-    background-color: #fafafa;
+    padding: 2rem 1.5rem;
+    background-color: $admin_canvas;
 
     &__card {
-        background: variables.$secondary_color;
-        border: 1px solid variables.$light_grey_color;
-        border-radius: 1.25rem;
+        background: $admin_surface;
+        border: 1px solid $admin_border;
+        border-radius: $admin_radius_lg;
         padding: 2.5rem;
         max-width: 460px;
+        width: 100%;
         text-align: center;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        box-shadow: $admin_shadow_modal;
         @include mixins.center(column);
         gap: 0.75rem;
 
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 800;
-        }
-
-        p {
-            color: variables.$medium_grey_color;
-            font-size: 0.92rem;
-            margin-bottom: 0.75rem;
-        }
+        h2 { font-size: 1.5rem; font-weight: 800; color: $admin_ink; }
+        p { color: $admin_ink_faint; font-size: 0.92rem; margin-bottom: 0.6rem; }
     }
 
-    &__icon {
-        color: variables.$primary_red_color;
-        margin-bottom: 0.5rem;
-    }
+    &__icon { color: $admin_rose; margin-bottom: 0.5rem; }
 
     &__actions {
         display: flex;
@@ -1413,4 +1409,258 @@
         justify-content: center;
         width: 100%;
     }
+}
+
+/* ========================================================================
+   Sidebar workspace layout
+   ======================================================================== */
+
+.admin-shell {
+    display: grid;
+    grid-template-columns: 238px minmax(0, 1fr);
+    align-items: start;
+    flex: 1;
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
+}
+
+.admin-sidebar {
+    position: sticky;
+    top: 76px;
+    min-height: calc(100vh - 76px);
+    padding: 2rem 1rem 1.5rem;
+    background: $admin_glass_bg_strong;
+    border-right: 1px solid $admin_border;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+
+    &__heading {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        padding: 0 0.75rem;
+
+        strong { font-size: 0.92rem; color: $admin_ink; }
+    }
+
+    &__eyebrow,
+    &__status-dot + span {
+        color: $admin_ink_faint;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: auto;
+        padding: 0.75rem;
+        color: $admin_ink_faint;
+        font-size: 0.72rem;
+        border-top: 1px solid $admin_border;
+    }
+
+    &__status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: $admin_emerald;
+        box-shadow: 0 0 0 4px $admin_emerald_tint;
+    }
+}
+
+.admin-container {
+    max-width: none;
+    width: auto;
+    margin: 0;
+    padding: 2.25rem clamp(1.25rem, 3vw, 3rem) 3.5rem;
+
+    &__header {
+        margin-bottom: 2rem;
+    }
+
+    &__eyebrow {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: $admin_brand;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+}
+
+.admin-tabs {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+    border-bottom: 0;
+    overflow: visible;
+
+    &__tab {
+        width: 100%;
+        min-height: 48px;
+        margin-bottom: 0;
+        padding: 0.75rem 0.8rem;
+        border: 1px solid transparent;
+        border-radius: $admin_radius_md;
+        text-align: left;
+
+        &:hover {
+            color: $admin_ink;
+            background: $admin_surface_tint;
+        }
+
+        &--active {
+            background-color: $admin_brand;
+            color: $admin_white;
+            box-shadow: $admin_brand_shadow;
+
+            .admin-tab-btn__icon {
+                color: $admin_white;
+            }
+        }
+    }
+
+    &__count { margin-left: auto; }
+}
+
+.admin-dashboard__overview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 270px;
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.admin-dashboard__metrics {
+    min-width: 0;
+    padding: 1.25rem;
+    border: 1px solid $admin_border;
+    border-radius: $admin_radius_lg;
+    background: $admin_glass_bg_soft;
+}
+
+.admin-dashboard__section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    color: $admin_ink;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.admin-dashboard__period {
+    color: $admin_ink_faint;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.admin-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+}
+
+.admin-quick-actions {
+    height: 100%;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 1.25rem;
+
+    &__title { font-size: 0.82rem; }
+    &__buttons { flex-direction: column; margin-top: auto; }
+    .admin-btn { width: 100%; justify-content: space-between; }
+}
+
+@media (max-width: 1050px) {
+    .admin-shell { grid-template-columns: 190px minmax(0, 1fr); }
+    .admin-dashboard__overview-grid { grid-template-columns: 1fr; }
+    .admin-quick-actions {
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        &__buttons { flex-direction: row; margin-top: 0; }
+        .admin-btn { width: auto; }
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-shell { display: block; }
+
+    .admin-sidebar {
+        position: sticky;
+        top: 58px;
+        z-index: 40;
+        min-height: 0;
+        padding: 0.7rem 1rem;
+        border-right: 0;
+        border-bottom: 1px solid $admin_border;
+        background: $admin_sticky_col_bg;
+
+        &__heading,
+        &__footer { display: none; }
+    }
+
+    .admin-tabs {
+        flex-direction: row;
+        gap: 0.35rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+
+        &__tab {
+            width: auto;
+            flex: 0 0 auto;
+            min-height: 42px;
+            padding: 0.6rem 0.75rem;
+            &--active { box-shadow: inset 0 -3px 0 $admin_brand; }
+        }
+    }
+
+    .admin-container { padding: 1.5rem 1rem 2.5rem; }
+    .admin-container__header { margin-bottom: 1.35rem; }
+    .admin-dashboard__metrics { padding: 1rem; }
+}
+
+@media (max-width: 560px) {
+    .admin-stats-grid { grid-template-columns: 1fr; }
+    .admin-quick-actions {
+        flex-direction: column;
+        align-items: stretch;
+        &__buttons { flex-direction: column; }
+        .admin-btn { width: 100%; }
+    }
+}
+
+/* Keep the order filters inside the content column instead of letting their
+   intrinsic width expand the whole admin page. */
+.admin-orders-view {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.admin-orders-view .admin-toolbar--stacked,
+.admin-orders-view .admin-filter-pills {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.admin-orders-view .admin-filter-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.15rem 0.1rem 0.4rem;
+}
+
+.admin-orders-view .admin-search {
+    width: 100%;
+    max-width: 100%;
 }

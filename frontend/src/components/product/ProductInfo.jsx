@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../hooks/CartContext';
+import { useAuth } from '../../hooks/AuthContext';
+import StarRating from '../StarRating';
 
 const COLORS = [
     { name: 'Olive Green', code: '#4F4631' },
@@ -8,7 +11,10 @@ const COLORS = [
 ];
 
 export const ProductInfo = ({ product, onAddToCart }) => {
+    const { user } = useAuth();
     const { addToCart } = useCart();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const variants = product?.variants || [];
     const rawSizes = variants.length > 0
@@ -77,6 +83,11 @@ export const ProductInfo = ({ product, onAddToCart }) => {
     };
 
     const handleAddToCart = async () => {
+        if (!user) {
+            navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
+            return;
+        }
+
         if (isOutOfStock || isAdding) return;
 
         try {
@@ -116,9 +127,9 @@ export const ProductInfo = ({ product, onAddToCart }) => {
             <div className="product-detail__info__group">
                 <h1 className="product-detail__title">{product?.name || 'One Life Graphic T-shirt'}</h1>
 
-                <div className="product-detail__rating" aria-label="4.5 out of 5 stars">
-                    <span className="product-detail__stars">★★★★☆</span>
-                    <span className="product-detail__rating-value"> 4.5/5</span>
+                <div className="product-detail__rating">
+                    <StarRating rating={product?.rating || 4.5} />
+                    <span className="product-detail__rating-value">{product?.rating || 4.5}/5</span>
                 </div>
 
                 <div className="product-detail__price">

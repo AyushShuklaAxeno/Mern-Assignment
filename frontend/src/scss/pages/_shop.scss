@@ -63,23 +63,25 @@
     }
 
     &__filter-icon {
-        width: 1.25em;
-        height: 1.25em;
-        opacity: 0.8;
+        color: variables.$medium_grey_color;
+        flex-shrink: 0;
     }
 
     &__close-button {
         background: transparent;
         border: 0;
         cursor: pointer;
-        padding: 0.25em;
+        padding: 0.35em;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        border-radius: 50%;
+        color: variables.$primary_color;
+        transition: background-color 0.2s ease, transform 0.15s ease;
 
-        img {
-            width: 1em;
-            height: 1em;
+        &:hover {
+            background-color: variables.$dress_style_bg_color;
+            transform: scale(1.08);
         }
     }
 
@@ -117,14 +119,19 @@
     }
 
     &__chevron {
-        width: 0.75em;
-        height: 0.75em;
-        opacity: 0.5;
+        color: variables.$medium_grey_color;
+        flex-shrink: 0;
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
     }
 
     &__section-header {
-        width: 100%;
         @include mixins.center($justifyContent: space-between);
+        width: 100%;
         background: transparent;
         border: 0;
         cursor: pointer;
@@ -136,8 +143,10 @@
 
     &__accordion-arrow {
         transition: transform 0.2s ease;
-        display: inline-block;
-        font-size: 0.85em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: variables.$primary_color;
 
         &--open {
             transform: rotate(180deg);

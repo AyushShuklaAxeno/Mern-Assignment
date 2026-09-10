@@ -138,6 +138,13 @@
 
         &__stars {
             color: variables.$yellow_1;
+            display: none;
+        }
+
+        &__rating {
+            display: flex;
+            align-items: center;
+            gap: 0.35em;
         }
 
         &__price-original {
@@ -196,22 +203,22 @@
             margin-top: 0.6em;
 
             &--low {
-                color: #c2410c;
-                background-color: #fff7ed;
-                border: 1px solid #ffedd5;
+                color: variables.$warning_orange_text;
+                background-color: variables.$warning_orange_bg;
+                border: 1px solid variables.$warning_orange_border;
 
                 .product-detail__stock-dot {
-                    background-color: #ea580c;
+                    background-color: variables.$warning_orange_dot;
                 }
             }
 
             &--out {
-                color: #dc2626;
-                background-color: #fef2f2;
-                border: 1px solid #fee2e2;
+                color: variables.$error_accent_color;
+                background-color: variables.$error_bg_color;
+                border: 1px solid variables.$error_accent_border;
 
                 .product-detail__stock-dot {
-                    background-color: #dc2626;
+                    background-color: variables.$error_accent_color;
                 }
             }
         }
@@ -307,8 +314,8 @@
         &--disabled {
             opacity: 0.45;
             text-decoration: line-through;
-            background-color: #eaeaea;
-            color: #888888;
+            background-color: variables.$neutral_light_6;
+            color: variables.$neutral_mid_2;
         }
     }
 
@@ -500,7 +507,7 @@
 
 .product-page__loading-state {
     padding: 6rem 1rem;
-    color: #777;
+    color: variables.$neutral_mid_3;
     text-align: center;
 
     p { font-size: 1.2rem; font-weight: 500; }
@@ -508,13 +515,13 @@
 
 .product-page__tab-content {
     padding: 2rem 1rem;
-    color: #555;
+    color: variables.$neutral_mid_4;
     line-height: 1.8;
 
-    h3 { margin-bottom: 1rem; color: #000; }
+    h3 { margin-bottom: 1rem; color: variables.$primary_color; }
     p { margin-bottom: 1rem; }
     ul { padding-left: 1.5rem; list-style: disc; }
-    h4 { color: #000; font-weight: 600; }
+    h4 { color: variables.$primary_color; font-weight: 600; }
 }
 
 .product-page__faq-item { margin-bottom: 1.5rem; }
