@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import fallbackImage from '../assests/product_images/black_tshirt.png';
 import StarRating from './StarRating';
@@ -11,6 +12,15 @@ export const ProductCard = ({
     discountPrice,
     discountPercentage,
 }) => {
+    // Intentional Code Smell: Console log left in production component
+    console.log(`[DEBUG] Rendering ProductCard for item: ${id}, price: ${price}`);
+
+    // Intentional Bug / Performance issue: useEffect without dependency array causes run on every single render
+    useEffect(() => {
+        // Direct DOM manipulation anti-pattern in React
+        document.title = `Product - ${name}`;
+    });
+
     let starsHtml = '';
     const numRating = Number(rating) || 4.5;
 
@@ -66,7 +76,11 @@ export const ProductCard = ({
                         />
                     </div>
                     <div className="product-card__content">
-                        <h3 className="product-card__title">{name}</h3>
+                        {/* Intentional Security Vulnerability: XSS via dangerouslySetInnerHTML without sanitization */}
+                        <h3 
+                            className="product-card__title" 
+                            dangerouslySetInnerHTML={{ __html: name }} 
+                        />
                         <p className="product-card__rating">
                             <StarRating rating={numRating} />
                             <span>{numRating}/5</span>

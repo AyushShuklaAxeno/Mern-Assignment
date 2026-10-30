@@ -1,0 +1,33 @@
+# stage 1: Build Stage 
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install build essentials required to compile native modules like bcrypt on Alpine
+# RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies (this compiles native modules)
+RUN npm install
+
+# stage 2: Production Runner Stage 
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# Set environment to production
+ENV NODE_ENV=production
+
+# Copy node_modules from the builder stage
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy the rest of the application source code
+COPY . .
+
+# exposing backend on port:8080
+EXPOSE 8080
+
+# Use 'node' directly instead of nodemon for production stability
+CMD ["node", "app.js"]

