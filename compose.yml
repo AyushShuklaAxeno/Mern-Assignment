@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: ./backend
+    container_name: mern-backend
+    privileged: true # Security risk: running container in privileged mode grants host root capabilities
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - JWT_SECRET=super_secret_jwt_key_do_not_share_12345678 # Hardcoded sensitive secret
+      - MONGO_INITDB_ROOT_PASSWORD=RootPasswordAdmin2026! # Plaintext root password in source control
+    env_file:
+      - ./backend/.env
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: mern-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080/api/v1
+    restart: always

@@ -1,10 +1,6 @@
 @use '../abstracts/variables' as variables;
 @use '../abstracts/mixins' as mixins;
 
-/* ==========================================================================
-   Admin Design Tokens (Sourced from variables)
-   ========================================================================== */
-
 $admin_ink: variables.$admin_ink;
 $admin_ink_soft: variables.$admin_ink_soft;
 $admin_ink_faint: variables.$admin_ink_faint;
@@ -69,9 +65,6 @@ $admin_ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 $admin_fast: all 0.15s $admin_ease;
 $admin_smooth: all 0.22s $admin_ease;
 
-/* ==========================================================================
-   1. Page shell
-   ========================================================================== */
 
 .admin-page {
     min-height: 100vh;
@@ -83,10 +76,6 @@ $admin_smooth: all 0.22s $admin_ease;
     display: flex;
     flex-direction: column;
 }
-
-/* ==========================================================================
-   2. Header — solid brand-colored bar, flat, no gradients on the bar itself
-   ========================================================================== */
 
 .admin-header {
     background-color: $admin_brand;
@@ -262,9 +251,6 @@ $admin_smooth: all 0.22s $admin_ease;
     box-shadow: $admin_shadow_header;
 }
 
-/* ==========================================================================
-   3. Container / page hero
-   ========================================================================== */
 
 .admin-container {
     max-width: 1280px;
@@ -329,9 +315,6 @@ $admin_smooth: all 0.22s $admin_ease;
     gap: 1.75rem;
 }
 
-/* ==========================================================================
-   4. Tabs — underline style, not a segmented pill control
-   ========================================================================== */
 
 .admin-tabs {
     display: flex;
@@ -390,10 +373,6 @@ $admin_smooth: all 0.22s $admin_ease;
         &__tab { padding: 0.7rem 0.8rem; font-size: 0.82rem; }
     }
 }
-
-/* ==========================================================================
-   5. KPI stat cards — colored left rail instead of top stripe
-   ========================================================================== */
 
 .admin-stats-grid {
     display: grid;
@@ -467,9 +446,6 @@ $admin_smooth: all 0.22s $admin_ease;
     }
 }
 
-/* ==========================================================================
-   6. Quick actions bar
-   ========================================================================== */
 
 .admin-quick-actions {
     background-color: $admin_surface;
@@ -503,9 +479,6 @@ $admin_smooth: all 0.22s $admin_ease;
     }
 }
 
-/* ==========================================================================
-   7. Buttons — square-ish (rounded-md), solid fills, no pill shapes
-   ========================================================================== */
 
 .admin-btn {
     display: inline-flex;
@@ -614,10 +587,6 @@ $admin_smooth: all 0.22s $admin_ease;
         &:hover { background-color: $admin_rose_dark; }
     }
 }
-
-/* ==========================================================================
-   8. Toolbar, search, filter pills
-   ========================================================================== */
 
 .admin-toolbar {
     display: flex;
@@ -731,9 +700,6 @@ $admin_smooth: all 0.22s $admin_ease;
     &__icon { flex-shrink: 0; color: $admin_amber; }
 }
 
-/* ==========================================================================
-   9. Section cards & table
-   ========================================================================== */
 
 .admin-section-card {
     background-color: $admin_surface;
@@ -838,10 +804,6 @@ $admin_smooth: all 0.22s $admin_ease;
     }
 }
 
-/* ==========================================================================
-   10. Product & category cells
-   ========================================================================== */
-
 .admin-product-cell {
     display: flex;
     align-items: center;
@@ -918,10 +880,6 @@ $admin_smooth: all 0.22s $admin_ease;
 .admin-category-title { font-weight: 700; font-size: 0.92rem; text-transform: capitalize; color: $admin_ink; }
 .admin-category-desc { color: $admin_ink_faint; font-size: 0.83rem; max-width: 340px; }
 
-/* ==========================================================================
-   11. Order cells & status changer
-   ========================================================================== */
-
 .admin-order-id-cell { display: flex; flex-direction: column; gap: 0.2rem; min-width: 110px; }
 .admin-order-id { font-family: monospace; font-weight: 700; font-size: 0.85rem; color: $admin_ink; }
 .admin-order-date { font-size: 0.75rem; color: $admin_ink_faint; }
@@ -968,9 +926,6 @@ $admin_smooth: all 0.22s $admin_ease;
     &:focus { outline: none; border-color: $admin_brand; box-shadow: 0 0 0 3px $admin_brand_tint; }
 }
 
-/* ==========================================================================
-   12. Badges — solid fills, small icon slot
-   ========================================================================== */
 
 .admin-badge {
     display: inline-flex;
@@ -999,9 +954,6 @@ $admin_smooth: all 0.22s $admin_ease;
     &--default     { background-color: $admin_surface_tint; color: $admin_ink_soft; }
 }
 
-/* ==========================================================================
-   13. Modals — near-fullscreen sheet on small screens
-   ========================================================================== */
 
 .admin-modal-backdrop {
     position: fixed;
@@ -1081,9 +1033,6 @@ $admin_smooth: all 0.22s $admin_ease;
     }
 }
 
-/* ==========================================================================
-   14. Forms
-   ========================================================================== */
 
 .admin-form {
     padding: 1.5rem 1.75rem;
@@ -1224,10 +1173,6 @@ $admin_smooth: all 0.22s $admin_ease;
     cursor: pointer;
 }
 
-/* ==========================================================================
-   15. Order detail modal elements
-   ========================================================================== */
-
 .admin-order-detail-content {
     padding: 1.5rem 1.75rem;
     display: flex;
@@ -1301,9 +1246,6 @@ $admin_smooth: all 0.22s $admin_ease;
     }
 }
 
-/* ==========================================================================
-   16. Toast
-   ========================================================================== */
 
 .admin-toast {
     position: fixed;
@@ -1343,10 +1285,6 @@ $admin_smooth: all 0.22s $admin_ease;
     from { transform: translateY(-16px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
-
-/* ==========================================================================
-   17. Empty states, loaders, unauthorized
-   ========================================================================== */
 
 .admin-empty-state {
     @include mixins.center(column);
@@ -1410,10 +1348,6 @@ $admin_smooth: all 0.22s $admin_ease;
         width: 100%;
     }
 }
-
-/* ========================================================================
-   Sidebar workspace layout
-   ======================================================================== */
 
 .admin-shell {
     display: grid;

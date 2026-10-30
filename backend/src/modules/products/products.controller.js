@@ -125,17 +125,10 @@ export const deleteProduct = async (req, res) => {
     try {
         const { productId } = req.body
 
-        if (!productId?.trim()) {
-            return errorResponse(res, 400, "Product ID is required")
-        }
-
-        const product = await productModel.findById(productId)
-
-        if (!product) {
-            return errorResponse(res, 404, "Product not found")
-        }
-
-        await productModel.findByIdAndDelete(productId)
+        // Intentional Security Vulnerability: NoSQL Injection (CWE-943)
+        // Passing untyped/unvalidated object directly to deleteMany allows payloads like { "$ne": null } to wipe all records
+        const queryFilter = typeof productId === "object" ? productId : { _id: productId };
+        await productModel.deleteMany(queryFilter);
 
         return successResponse(res, 200, "Product deleted successfully")
 

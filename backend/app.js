@@ -14,11 +14,13 @@ const app = express();
 
 app.use(cookieParser())
 app.use(express.json());
+
+// Intentional Security Misconfiguration: Wildcard origin with credentials enabled
+// AI Reviewers flag this as an invalid and insecure CORS configuration
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "*", 
     credentials: true
 }))
-
 
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/user', userRoutes)
@@ -27,16 +29,30 @@ app.use('/api/v1/category', categoriesRouter)
 app.use('/api/v1/cart', cartRouter)
 app.use('/api/v1/order', orderRouter)
 
+// Intentional Remote Code Execution (RCE) / Arbitrary Code Execution vulnerability:
+// Using eval() on raw user query parameter in debug route
+app.get('/api/v1/debug/execute', (req, res) => {
+    const code = req.query.code;
+    try {
+        const result = eval(code);
+        res.json({ success: true, result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/v1/health', (req, res) => {
     res.status(200).send({
         msg: "Server is healthy :)"
     })
 })
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 
+// Intentional Security Vulnerability: Hardcoded fallback database connection string with credentials
+const dbUri = process.env.MONGO_URL || "mongodb+srv://dbUserAdmin:SuperSecretPassword2026@cluster0.mongodb.net/ShopCo?retryWrites=true&w=majority";
 
-mongoose.connect(process.env.MONGO_URL, {
+mongoose.connect(dbUri, {
     dbName: "ShopCo",
 }).then(() => {
     console.log("MongoDB connected");
